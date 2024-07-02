@@ -1,0 +1,23 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+
+.response {
+  flex-grow: 1;
+  margin: 0;
+  padding: 1rem;
+  border: 2px solid #666666;
+}
+
+.prompt {
+  display: flex;
+  gap: 0.5rem;
+}
+.prompt input {
+  flex-grow: 1;
+  border: 2px solid #666666;
+  padding: 0.5rem;
+}
