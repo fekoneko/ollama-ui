@@ -30,7 +30,7 @@ export const PromptModePage: FC = () => {
   };
 
   return (
-    <main role="main" className={styles['page']}>
+    <div className={styles['page']}>
       <form onSubmit={handleSubmit} className={styles['prompt']}>
         <input ref={inputRef} type="text" placeholder="Enter your prompt..." />
         <button type="submit">Ask AI</button>
@@ -41,6 +41,6 @@ export const PromptModePage: FC = () => {
         {isSuccess && reply?.response}
         {isError && error?.message}
       </p>
-    </main>
+    </div>
   );
 };
