@@ -5,8 +5,9 @@
 
   @mixin larger-than $mantine-breakpoint-sm {
     & h1 {
-      text-align: center;
       width: 30%;
+      max-width: 18rem;
+      text-align: center;
       font-size: 1.75rem;
     }
   }
