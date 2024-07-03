@@ -10,7 +10,7 @@ export const App: FC = () => {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: '30%', breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      navbar={{ width: 'min(30%,18rem)', breakpoint: 'sm', collapsed: { mobile: !opened } }}
     >
       <AppShell.Header className={styles['header']}>
         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
@@ -22,7 +22,7 @@ export const App: FC = () => {
         <NavLink label="Chat Mode" href="/" leftSection="💬" />
       </AppShell.Navbar>
 
-      <AppShell.Main>
+      <AppShell.Main className={styles['main']}>
         <PromptModePage />
       </AppShell.Main>
     </AppShell>

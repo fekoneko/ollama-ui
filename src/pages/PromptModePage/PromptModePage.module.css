@@ -1,24 +1,39 @@
 .page {
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 0;
+  gap: 0.8rem;
+  padding: 1rem;
 }
 
-.reply {
+.prompt-container {
+  display: flex;
+  gap: 0.6rem;
+
+  & :first-child {
+    flex-grow: 1;
+  }
+}
+
+.reply-container {
   flex-grow: 1;
   margin: 0;
-  padding: 1rem;
-  border: 2px solid #666666;
-}
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--mantine-color-dark-4);
+  border-radius: var(--mantine-radius-sm);
 
-.prompt {
-  display: flex;
-  gap: 0.5rem;
+  & .reply-error {
+    color: var(--mantine-color-red-6);
+  }
 
-  & input {
-    flex-grow: 1;
-    border: 2px solid #666666;
-    padding: 0.5rem;
+  & .reply-skeleton {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: 0.8rem 0;
+
+    & > * {
+      height: 0.9rem;
+    }
   }
 }

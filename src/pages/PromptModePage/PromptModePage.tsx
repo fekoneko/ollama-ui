@@ -1,11 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 import styles from './PromptModePage.module.css';
 import ollama from 'ollama/browser';
-import { FC, FormEvent, useRef, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
+import { Button, CloseButton, Skeleton, Text, TextInput } from '@mantine/core';
+
+const ReplyPlaceholder: FC = () => (
+  <>
+    <Text>Waiting for reply...</Text>
+    <div className={styles['reply-skeleton']}>
+      <Skeleton width="40%" />
+      <Skeleton width="50%" />
+      <Skeleton width="15%" />
+      <Skeleton width="70%" />
+      <Skeleton width="60%" />
+    </div>
+  </>
+);
 
 export const PromptModePage: FC = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [prompt, setPrompt] = useState<string>('');
+  const [submitedPrompt, setSubmittedPrompt] = useState<string>('');
 
   const {
     data: reply,
@@ -14,10 +28,10 @@ export const PromptModePage: FC = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ['reply', prompt],
+    queryKey: ['reply', submitedPrompt],
     queryFn: async () => {
-      if (!prompt) return null;
-      return await ollama.generate({ model: 'llama3', prompt });
+      if (!submitedPrompt) return null;
+      return await ollama.generate({ model: 'llama3', prompt: submitedPrompt });
     },
     staleTime: Infinity,
     retry: false,
@@ -25,22 +39,27 @@ export const PromptModePage: FC = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!inputRef.current) return;
-    setPrompt(inputRef.current.value);
+    setSubmittedPrompt(prompt);
   };
 
   return (
     <div className={styles['page']}>
-      <form onSubmit={handleSubmit} className={styles['prompt']}>
-        <input ref={inputRef} type="text" placeholder="Enter your prompt..." />
-        <button type="submit">Ask AI</button>
+      <form onSubmit={handleSubmit} className={styles['prompt-container']}>
+        <TextInput
+          placeholder="Enter your prompt..."
+          autoFocus
+          value={prompt}
+          onChange={(e) => setPrompt(e.currentTarget.value)}
+          rightSection={<CloseButton onClick={() => setPrompt('')} />}
+        />
+        <Button type="submit">Ask AI</Button>
       </form>
 
-      <p className={styles['reply']}>
-        {isLoading && 'Waiting for reply...'}
-        {isSuccess && reply?.response}
-        {isError && error?.message}
-      </p>
+      <div className={styles['reply-container']}>
+        {isLoading && <ReplyPlaceholder />}
+        {isSuccess && <Text>{reply?.response}</Text>}
+        {isError && <Text className={styles['reply-error']}>{error?.message}</Text>}
+      </div>
     </div>
   );
 };
