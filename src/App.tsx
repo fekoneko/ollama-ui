@@ -1,28 +1,16 @@
 import { PromptModePage } from '@/pages/PromptModePage';
 import { FC } from 'react';
-import { AppShell, Burger, NavLink, Title } from '@mantine/core';
+import { AppShell, Title } from '@mantine/core';
 import styles from './App.module.css';
-import { useDisclosure } from '@mantine/hooks';
 
 export const App: FC = () => {
-  const [opened, { toggle }] = useDisclosure();
-
   return (
-    <AppShell
-      header={{ height: 60 }}
-      navbar={{ width: 'min(30%,18rem)', breakpoint: 'sm', collapsed: { mobile: !opened } }}
-    >
-      <AppShell.Header className={styles['header']}>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+    <AppShell header={{ height: 60 }}>
+      <AppShell.Header className={styles.header}>
         <Title>Ollama UI</Title>
       </AppShell.Header>
 
-      <AppShell.Navbar>
-        <NavLink label="Prompt Mode" href="/" leftSection="💬" active />
-        <NavLink label="Chat Mode" href="/" leftSection="💬" />
-      </AppShell.Navbar>
-
-      <AppShell.Main className={styles['main']}>
+      <AppShell.Main className={styles.main}>
         <PromptModePage />
       </AppShell.Main>
     </AppShell>

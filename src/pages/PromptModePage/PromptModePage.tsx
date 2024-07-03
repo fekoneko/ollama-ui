@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import styles from './PromptModePage.module.css';
 import ollama from 'ollama/browser';
 import { FC, FormEvent, useState } from 'react';
@@ -7,7 +7,7 @@ import { Button, CloseButton, Skeleton, Text, TextInput } from '@mantine/core';
 const ReplyPlaceholder: FC = () => (
   <>
     <Text>Waiting for reply...</Text>
-    <div className={styles['reply-skeleton']}>
+    <div className={styles.replySkeleton}>
       <Skeleton width="40%" />
       <Skeleton width="50%" />
       <Skeleton width="15%" />
@@ -18,47 +18,42 @@ const ReplyPlaceholder: FC = () => (
 );
 
 export const PromptModePage: FC = () => {
-  const [prompt, setPrompt] = useState<string>('');
-  const [submitedPrompt, setSubmittedPrompt] = useState<string>('');
+  const [inputPrompt, setInputPrompt] = useState<string>('');
 
   const {
     data: reply,
-    isLoading,
+    mutate: generateReply,
+    isPending,
     isSuccess,
     isError,
     error,
-  } = useQuery({
-    queryKey: ['reply', submitedPrompt],
-    queryFn: async () => {
-      if (!submitedPrompt) return null;
-      return await ollama.generate({ model: 'llama3', prompt: submitedPrompt });
-    },
-    staleTime: Infinity,
-    retry: false,
+  } = useMutation({
+    mutationKey: ['reply'],
+    mutationFn: async (prompt: string) => await ollama.generate({ model: 'llama3', prompt }),
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmittedPrompt(prompt);
+    generateReply(inputPrompt);
   };
 
   return (
     <div className={styles['page']}>
-      <form onSubmit={handleSubmit} className={styles['prompt-container']}>
+      <form onSubmit={handleSubmit} className={styles.promptContainer}>
         <TextInput
           placeholder="Enter your prompt..."
           autoFocus
-          value={prompt}
-          onChange={(e) => setPrompt(e.currentTarget.value)}
-          rightSection={<CloseButton onClick={() => setPrompt('')} />}
+          value={inputPrompt}
+          onChange={(e) => setInputPrompt(e.currentTarget.value)}
+          rightSection={<CloseButton onClick={() => setInputPrompt('')} />}
         />
         <Button type="submit">Ask AI</Button>
       </form>
 
-      <div className={styles['reply-container']}>
-        {isLoading && <ReplyPlaceholder />}
+      <div className={styles.replyContainer}>
+        {isPending && <ReplyPlaceholder />}
         {isSuccess && <Text>{reply?.response}</Text>}
-        {isError && <Text className={styles['reply-error']}>{error?.message}</Text>}
+        {isError && <Text className={styles.replyError}>{error?.message}</Text>}
       </div>
     </div>
   );
