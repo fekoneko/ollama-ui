@@ -41,11 +41,11 @@ export const PromptModePage: FC = () => {
     },
 
     onSuccess: async (stream, _variables, context) => {
+      const abortStream = () => stream.abort();
       if (context.signal.aborted) {
-        stream.abort();
+        abortStream();
         return;
       }
-      const abortStream = () => stream.abort();
       context.signal.addEventListener('abort', abortStream, { once: true });
 
       for await (const chunk of stream) {
