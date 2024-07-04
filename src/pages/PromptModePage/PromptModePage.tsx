@@ -18,6 +18,7 @@ const ReplyPlaceholder: FC = () => (
 export const PromptModePage: FC = () => {
   const [prompt, setPrompt] = useState('');
   const [reply, setReply] = useState<string>();
+  const [isStreamingReply, setIsStreamingReply] = useState(false);
 
   const {
     data: replyStream,
@@ -38,19 +39,19 @@ export const PromptModePage: FC = () => {
     onSuccess: (stream) => {
       const readReplyStream = async () => {
         try {
+          setIsStreamingReply(true);
           for await (const chunk of stream) {
             setReply((prev) => (prev ?? '') + chunk.response);
           }
         } catch (error) {
           if (!(error instanceof Error) || error.name !== 'AbortError') throw error;
+        } finally {
+          setIsStreamingReply(false);
         }
       };
       readReplyStream();
     },
   });
-
-  const isWaitingStream = isPending && reply === undefined;
-  const isStreamingReply = isPending && reply !== undefined;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -67,21 +68,21 @@ export const PromptModePage: FC = () => {
           onChange={(e) => setPrompt(e.currentTarget.value)}
           rightSection={<CloseButton onClick={() => setPrompt('')} />}
         />
-        <Button type="submit" disabled={isWaitingStream}>
+        <Button type="submit" disabled={isPending}>
           Ask AI
         </Button>
       </form>
 
-      <div className={styles.replyContainer}>
-        {isWaitingStream && <ReplyPlaceholder />}
-        {isStreamingReply && (
+      <pre className={styles.replyContainer}>
+        {isPending && <ReplyPlaceholder />}
+        {isSuccess && (
           <Text>
-            {reply} <TypingAnimation />
+            {reply}
+            {isStreamingReply && <TypingAnimation />}
           </Text>
         )}
-        {isSuccess && <Text>{reply}</Text>}
         {isError && <Text className={styles.replyError}>{error?.message}</Text>}
-      </div>
+      </pre>
     </div>
   );
 };

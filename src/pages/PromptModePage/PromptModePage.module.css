@@ -24,6 +24,9 @@
   border-radius: var(--mantine-radius-sm);
   overflow-y: scroll;
 
+  font-family: inherit;
+  white-space: pre-wrap;
+
   & .replyError {
     color: var(--mantine-color-red-6);
   }
