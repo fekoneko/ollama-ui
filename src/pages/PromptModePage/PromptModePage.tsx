@@ -55,8 +55,8 @@ export const PromptModePage: FC = () => {
     },
   });
 
-  const isWaitingFirstWord = isPending && reply === undefined;
-  const isReplyInProgress = isPending && reply !== undefined;
+  const isWaitingStream = isPending && reply === undefined;
+  const isStreamingReply = isPending && reply !== undefined;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,8 +77,8 @@ export const PromptModePage: FC = () => {
       </form>
 
       <div className={styles.replyContainer}>
-        {isWaitingFirstWord && <ReplyPlaceholder />}
-        {isReplyInProgress && (
+        {isWaitingStream && <ReplyPlaceholder />}
+        {isStreamingReply && (
           <Text>
             {reply} <TypingAnimation />
           </Text>
