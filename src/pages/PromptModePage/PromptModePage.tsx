@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import styles from './PromptModePage.module.css';
 import ollama from 'ollama/browser';
-import { FC, FormEvent, useRef, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { Button, CloseButton, Skeleton, Text, TextInput } from '@mantine/core';
 import { TypingAnimation } from '@/components/animations/TypingAnimation';
 
@@ -18,9 +18,9 @@ const ReplyPlaceholder: FC = () => (
 export const PromptModePage: FC = () => {
   const [prompt, setPrompt] = useState('');
   const [reply, setReply] = useState<string>();
-  const abortControllerRef = useRef<AbortController>();
 
   const {
+    data: replyStream,
     mutate: generateReply,
     isPending,
     isSuccess,
@@ -32,26 +32,20 @@ export const PromptModePage: FC = () => {
 
     onMutate: () => {
       setReply(undefined);
-
-      const abortController = new AbortController();
-      abortControllerRef.current?.abort();
-      abortControllerRef.current = abortController;
-
-      return { signal: abortController.signal };
+      replyStream?.abort();
     },
 
-    onSuccess: async (stream, _variables, context) => {
-      const abortStream = () => stream.abort();
-      if (context.signal.aborted) {
-        abortStream();
-        return;
-      }
-      context.signal.addEventListener('abort', abortStream, { once: true });
-
-      for await (const chunk of stream) {
-        setReply((prev) => (prev ?? '') + chunk.response);
-      }
-      context.signal.removeEventListener('abort', abortStream);
+    onSuccess: (stream) => {
+      const readReplyStream = async () => {
+        try {
+          for await (const chunk of stream) {
+            setReply((prev) => (prev ?? '') + chunk.response);
+          }
+        } catch (error) {
+          if (!(error instanceof Error) || error.name !== 'AbortError') throw error;
+        }
+      };
+      readReplyStream();
     },
   });
 
@@ -73,7 +67,9 @@ export const PromptModePage: FC = () => {
           onChange={(e) => setPrompt(e.currentTarget.value)}
           rightSection={<CloseButton onClick={() => setPrompt('')} />}
         />
-        <Button type="submit">Ask AI</Button>
+        <Button type="submit" disabled={isWaitingStream}>
+          Ask AI
+        </Button>
       </form>
 
       <div className={styles.replyContainer}>
