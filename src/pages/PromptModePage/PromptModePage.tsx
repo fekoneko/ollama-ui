@@ -18,7 +18,7 @@ const ReplyPlaceholder: FC = () => (
 );
 
 export const PromptModePage: FC = () => {
-  const [inputPrompt, setInputPrompt] = useState<string>('');
+  const [prompt, setPrompt] = useState<string>('');
 
   const {
     data: reply,
@@ -28,24 +28,24 @@ export const PromptModePage: FC = () => {
     isError,
     error,
   } = useMutation({
-    mutationKey: ['reply'],
-    mutationFn: async (prompt: string) => await ollama.generate({ model: 'llama3', prompt }),
+    mutationKey: ['generate'],
+    mutationFn: async () => await ollama.generate({ model: 'llama3', prompt }),
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    generateReply(inputPrompt);
+    generateReply();
   };
 
   return (
-    <div className={styles['page']}>
+    <div className={styles.page}>
       <form onSubmit={handleSubmit} className={styles.promptContainer}>
         <TextInput
           placeholder="Enter your prompt..."
           autoFocus
-          value={inputPrompt}
-          onChange={(e) => setInputPrompt(e.currentTarget.value)}
-          rightSection={<CloseButton onClick={() => setInputPrompt('')} />}
+          value={prompt}
+          onChange={(e) => setPrompt(e.currentTarget.value)}
+          rightSection={<CloseButton onClick={() => setPrompt('')} />}
         />
         <Button type="submit">Ask AI</Button>
       </form>
