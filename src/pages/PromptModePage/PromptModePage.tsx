@@ -34,7 +34,6 @@ export const PromptModePage: FC = () => {
       setReply(undefined);
 
       const abortController = new AbortController();
-      console.log(abortControllerRef.current);
       abortControllerRef.current?.abort();
       abortControllerRef.current = abortController;
 
