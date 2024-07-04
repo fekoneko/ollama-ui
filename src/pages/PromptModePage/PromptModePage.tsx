@@ -18,7 +18,7 @@ const ReplyPlaceholder: FC = () => (
 export const PromptModePage: FC = () => {
   const [prompt, setPrompt] = useState('');
   const [reply, setReply] = useState<string>();
-  const [isStreamingReply, setIsStreamingReply] = useState(false);
+  const [isReplyCompleted, setIsReplyCompleted] = useState(false);
 
   const {
     data: replyStream,
@@ -39,14 +39,12 @@ export const PromptModePage: FC = () => {
     onSuccess: (stream) => {
       const readReplyStream = async () => {
         try {
-          setIsStreamingReply(true);
           for await (const chunk of stream) {
             setReply((prev) => (prev ?? '') + chunk.response);
+            setIsReplyCompleted(chunk.done);
           }
         } catch (error) {
           if (!(error instanceof Error) || error.name !== 'AbortError') throw error;
-        } finally {
-          setIsStreamingReply(false);
         }
       };
       readReplyStream();
@@ -78,7 +76,7 @@ export const PromptModePage: FC = () => {
         {isSuccess && (
           <Text>
             {reply}
-            {isStreamingReply && <TypingAnimation />}
+            {!isReplyCompleted && <TypingAnimation />}
           </Text>
         )}
         {isError && <Text className={styles.replyError}>{error?.message}</Text>}
