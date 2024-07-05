@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 0.8rem 0;
+
+  & > .wordSkeleton {
+    height: 0.9rem;
+  }
+}
