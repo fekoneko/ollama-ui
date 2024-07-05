@@ -32,12 +32,13 @@ export const PromptModePage: FC = () => {
 
     onSuccess: async (stream) => {
       replyStreamRef.current = stream;
+
       try {
         for await (const chunk of stream) {
           setReply((prev) => (prev ?? '') + chunk.response);
         }
-      } catch (error) {
-        if (!(error instanceof Error) || error.name !== 'AbortError') throw error;
+      } catch (error: any) {
+        if (error.name !== 'AbortError') throw error;
       }
     },
   });
