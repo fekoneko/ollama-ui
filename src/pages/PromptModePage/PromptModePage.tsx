@@ -1,27 +1,21 @@
 import { useMutation } from '@tanstack/react-query';
 import styles from './PromptModePage.module.css';
 import ollama from 'ollama/browser';
-import { FC, FormEvent, useState } from 'react';
-import { Button, CloseButton, Skeleton, Text, TextInput } from '@mantine/core';
-import { TypingAnimation } from '@/components/animations/TypingAnimation';
+import { FC, FormEvent, useRef, useState } from 'react';
+import { Button, CloseButton, Text, TextInput } from '@mantine/core';
+import { Typing } from '@/components/Typing';
+import { TextSkeleton } from '@/components/TextSkeleton';
 
-const ReplyPlaceholder: FC = () => (
-  <div className={styles.replySkeleton}>
-    <Skeleton width="40%" />
-    <Skeleton width="55%" />
-    <Skeleton width="15%" />
-    <Skeleton width="70%" />
-    <Skeleton width="60%" />
-  </div>
-);
+interface Abortable {
+  abort: () => void;
+}
 
 export const PromptModePage: FC = () => {
   const [prompt, setPrompt] = useState('');
   const [reply, setReply] = useState<string>();
-  const [isReplyCompleted, setIsReplyCompleted] = useState(false);
+  const replyStreamRef = useRef<Abortable>();
 
   const {
-    data: replyStream,
     mutate: generateReply,
     isPending,
     isSuccess,
@@ -33,23 +27,23 @@ export const PromptModePage: FC = () => {
 
     onMutate: () => {
       setReply(undefined);
-      replyStream?.abort();
+      replyStreamRef.current?.abort();
     },
 
-    onSuccess: (stream) => {
-      const readReplyStream = async () => {
-        try {
-          for await (const chunk of stream) {
-            setReply((prev) => (prev ?? '') + chunk.response);
-            setIsReplyCompleted(chunk.done);
-          }
-        } catch (error) {
-          if (!(error instanceof Error) || error.name !== 'AbortError') throw error;
+    onSuccess: async (stream) => {
+      replyStreamRef.current = stream;
+      try {
+        for await (const chunk of stream) {
+          setReply((prev) => (prev ?? '') + chunk.response);
         }
-      };
-      readReplyStream();
+      } catch (error) {
+        if (!(error instanceof Error) || error.name !== 'AbortError') throw error;
+      }
     },
   });
+
+  const isWaitingStream = isPending && reply === undefined;
+  const isStreamingReply = isPending && reply !== undefined;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,21 +60,21 @@ export const PromptModePage: FC = () => {
           onChange={(e) => setPrompt(e.currentTarget.value)}
           rightSection={<CloseButton onClick={() => setPrompt('')} />}
         />
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isWaitingStream}>
           Ask AI
         </Button>
       </form>
 
-      <pre className={styles.replyContainer}>
-        {isPending && <ReplyPlaceholder />}
-        {isSuccess && (
-          <Text>
-            {reply}
-            {!isReplyCompleted && <TypingAnimation />}
+      <div className={styles.replyContainer}>
+        {isWaitingStream && <TextSkeleton />}
+        {isStreamingReply && (
+          <Text className={styles.replyText}>
+            {reply} {<Typing />}
           </Text>
         )}
+        {isSuccess && <Text className={styles.replyText}>{reply}</Text>}
         {isError && <Text className={styles.replyError}>{error?.message}</Text>}
-      </pre>
+      </div>
     </div>
   );
 };

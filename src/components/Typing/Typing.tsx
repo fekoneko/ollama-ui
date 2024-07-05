@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import styles from './TypingAnimation.module.css';
+import styles from './Typing.module.css';
 
-export const TypingAnimation: FC = () => {
+export const Typing: FC = () => {
   return (
     <i className={styles.container}>
       {Array(3)
