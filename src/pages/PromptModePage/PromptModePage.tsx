@@ -73,7 +73,7 @@ export const PromptModePage: FC = () => {
             <MarkdownView typing>{reply}</MarkdownView>
           </>
         )}
-        {isSuccess && <MarkdownView typing>{reply}</MarkdownView>}
+        {isSuccess && <MarkdownView>{reply}</MarkdownView>}
         {isError && <Text className={styles.replyError}>{error?.message}</Text>}
       </div>
     </div>

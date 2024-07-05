@@ -1,7 +1,22 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, isValidElement, PropsWithChildren, ReactNode, useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styles from './MarkdownView.module.css';
+import { CodeHighlight, InlineCodeHighlight } from '@mantine/code-highlight';
+
+interface CodeComponentProps {
+  className?: string;
+  children?: ReactNode;
+}
+
+const BlockCodeComponent = ({ children, className }: CodeComponentProps): JSX.Element => {
+  const code = isValidElement(children) ? children.props.children : '';
+  return <CodeHighlight code={code} language={className?.replace('language-', '')} />;
+};
+
+const InlineCodeComponent = ({ children }: PropsWithChildren): JSX.Element => (
+  <InlineCodeHighlight code={children?.toString() ?? ''} />
+);
 
 interface MarkdownViewProps {
   typing?: boolean;
@@ -29,6 +44,7 @@ export const MarkdownView: FC<MarkdownViewProps> = ({ typing, children }) => {
         animateCursor ? styles.animateCursor : '',
       ].join(' ')}
       remarkPlugins={[remarkGfm]}
+      components={{ pre: BlockCodeComponent, code: InlineCodeComponent }}
     >
       {children}
     </Markdown>

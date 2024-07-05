@@ -9,7 +9,7 @@
 }
 
 .markdownView {
-  & * {
+  & p {
     margin: 0.5em 0;
     word-wrap: break-word;
   }
@@ -41,7 +41,7 @@
 }
 
 .typing {
-  & :last-child:not(strong, em, del, a, code, pre, :has(:not(strong, em, del, a, code)))::after {
+  & :last-child:not(strong, em, del, a, span, :has(:not(strong, em, del, a, span)))::after {
     display: inline-block;
     content: '';
     width: 2px;
