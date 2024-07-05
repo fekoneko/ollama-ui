@@ -41,7 +41,13 @@
 }
 
 .typing {
-  & :last-child:not(strong, em, del, a, span, :has(:not(strong, em, del, a, span)))::after {
+  & > :not(blockquote, .codeBlock, ol, ul, table):last-child::after,
+  & > blockquote:last-child > :last-child::after,
+  & > .codeBlock:last-child code:last-child::after,
+  & > :last-child li:last-child:not(:has(:last-child))::after,
+  & > :last-child li:last-child li:last-child:not(:has(:last-child))::after,
+  & > :last-child li:last-child li:last-child li:last-child:not(:has(:last-child))::after,
+  & > table:last-child tr:last-child > td:last-child::after {
     display: inline-block;
     content: '';
     width: 2px;
@@ -49,9 +55,7 @@
     margin: -0.2em 0.1em;
     background-color: var(--mantine-color-dark-1);
   }
-  & :not(:last-child) :last-child::after {
-    display: none;
-  }
+
   &.animateCursor ::after {
     animation: typindAnimation 1s ease-in-out infinite;
   }

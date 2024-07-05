@@ -15,6 +15,7 @@ const BlockCodeComponent = ({ children, className }: CodeComponentProps): JSX.El
     <CodeHighlight
       code={children.props.children ?? ''}
       language={className?.replace('language-', '')}
+      className={styles.codeBlock}
     />
   );
 };
