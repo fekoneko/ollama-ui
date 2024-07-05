@@ -1,0 +1,58 @@
+@keyframes typindAnimation {
+  15%,
+  50% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+.markdownView {
+  & * {
+    margin: 0.5em 0;
+    word-wrap: break-word;
+  }
+  hr {
+    margin: 1em 0 2em 0;
+  }
+  li {
+    margin: 0.2em 0;
+  }
+
+  & blockquote {
+    border-left: 2px solid var(--mantine-color-dark-1);
+    padding: 0.1em 0 0.1em 0.6em;
+  }
+
+  & table {
+    max-width: 100%;
+    border-collapse: collapse;
+
+    & th,
+    & td {
+      padding: 0.2em 0.6em;
+      border: 1px solid var(--mantine-color-dark-1);
+    }
+    & thead {
+      background-color: var(--mantine-color-dark-6);
+    }
+  }
+}
+
+.typing {
+  & :last-child:not(strong, em, del, a, code, pre, :has(:not(strong, em, del, a, code)))::after {
+    display: inline-block;
+    content: '';
+    width: 2px;
+    height: 1.4em;
+    margin: -0.2em 0.1em;
+    background-color: var(--mantine-color-dark-1);
+  }
+  & :not(:last-child) :last-child::after {
+    display: none;
+  }
+  &.animateCursor ::after {
+    animation: typindAnimation 1s ease-in-out infinite;
+  }
+}
