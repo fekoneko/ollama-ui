@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <MantineProvider defaultColorScheme="dark">
         <App />
       </MantineProvider>
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
     </QueryClientProvider>
   </StrictMode>,
 );

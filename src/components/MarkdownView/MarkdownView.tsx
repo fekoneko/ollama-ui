@@ -10,8 +10,13 @@ interface CodeComponentProps {
 }
 
 const BlockCodeComponent = ({ children, className }: CodeComponentProps): JSX.Element => {
-  const code = isValidElement(children) ? children.props.children : '';
-  return <CodeHighlight code={code} language={className?.replace('language-', '')} />;
+  if (!isValidElement(children)) return <></>;
+  return (
+    <CodeHighlight
+      code={children.props.children ?? ''}
+      language={className?.replace('language-', '')}
+    />
+  );
 };
 
 const InlineCodeComponent = ({ children }: PropsWithChildren): JSX.Element => (
