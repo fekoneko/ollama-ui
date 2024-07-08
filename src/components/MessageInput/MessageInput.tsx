@@ -22,6 +22,7 @@ export const MessageInput: FC<MessageInputProps> = ({ message, setMessage, onSen
       <TextInput
         placeholder="Enter your message..."
         autoFocus
+        autoComplete="off"
         value={message}
         onChange={(e) => setMessage(e.currentTarget.value)}
         rightSection={
