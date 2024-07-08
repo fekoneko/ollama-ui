@@ -33,16 +33,18 @@ export interface ChatMessagesProps {
 
 export const ChatMessages: FC<ChatMessagesProps> = ({ chatHistory, status }) => {
   return (
-    <div className={styles.messagesContainer}>
-      {chatHistory.map((message, index) => {
-        const isLastMessage = index === chatHistory.length - 1;
+    <div className={styles.messagesWrapper}>
+      <div className={styles.messagesContainer}>
+        {chatHistory.map((message, index) => {
+          const isLastMessage = index === chatHistory.length - 1;
 
-        return (
-          <MessageBox key={index} role={message.role} status={isLastMessage ? status : 'success'}>
-            {message.content}
-          </MessageBox>
-        );
-      })}
+          return (
+            <MessageBox key={index} role={message.role} status={isLastMessage ? status : 'success'}>
+              {message.content}
+            </MessageBox>
+          );
+        })}
+      </div>
     </div>
   );
 };

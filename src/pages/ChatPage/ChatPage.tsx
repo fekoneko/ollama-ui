@@ -5,7 +5,6 @@ import { FC, useRef, useState } from 'react';
 import { MessageInput } from '@/components/MessageInput';
 import { ChatMessages, MessageStatus } from '@/components/ChatMessages';
 import { useChatHistory } from '@/hooks/useChatHistory';
-import { Message } from '@/types/chat';
 
 interface Abortable {
   abort: () => void;
@@ -13,9 +12,8 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [inputMessage, setInputMessage] = useState('');
-  const [reply, setReply] = useState<string>();
   const replyStreamRef = useRef<Abortable>();
-  const { chatHistory, pushToChatHistory } = useChatHistory();
+  const { chatHistory, lastMessageFrom, pushToChatHistory, updateLastMessage } = useChatHistory();
 
   const {
     mutate: generateReply,
@@ -23,41 +21,36 @@ export const ChatPage: FC = () => {
     isSuccess,
   } = useMutation({
     mutationKey: ['generate'],
-    mutationFn: async (messages: Message[]) =>
-      await ollama.chat({ model: 'llama3', messages, stream: true }),
-
-    onMutate: () => {
-      setReply(undefined);
+    mutationFn: async (message: string) => {
       replyStreamRef.current?.abort();
+      const newChatHistory = pushToChatHistory({ role: 'user', content: message });
+
+      return await ollama.chat({ model: 'llama3', messages: newChatHistory, stream: true });
     },
 
     onSuccess: async (stream) => {
       replyStreamRef.current = stream;
-      let currentReply = '';
+      pushToChatHistory({ role: 'assistant', content: '' });
 
       try {
         for await (const chunk of stream) {
-          currentReply += chunk.message.content;
-          setReply(currentReply);
+          updateLastMessage((prev) => prev + chunk.message.content);
         }
       } catch (error: any) {
         if (error.name !== 'AbortError') throw error;
       }
-
-      pushToChatHistory({ role: 'assistant', content: currentReply });
     },
   });
 
-  const handleSend = () => {
+  const handleSend = (message: string) => {
     if (status === 'waiting') return;
-    const newChatHistory = pushToChatHistory({ role: 'user', content: inputMessage });
-    generateReply(newChatHistory);
+    generateReply(message);
   };
 
   const status: MessageStatus =
-    isPending && reply === undefined
+    isPending && lastMessageFrom === 'user'
       ? 'waiting'
-      : isPending && reply !== undefined
+      : isPending && lastMessageFrom === 'assistant'
         ? 'streaming'
         : isSuccess
           ? 'success'
@@ -65,14 +58,7 @@ export const ChatPage: FC = () => {
 
   return (
     <div className={styles.page}>
-      <ChatMessages
-        chatHistory={
-          status === 'streaming'
-            ? [...chatHistory, { role: 'assistant', content: reply ?? '' }]
-            : chatHistory
-        }
-        status={status}
-      />
+      <ChatMessages chatHistory={chatHistory} status={status} />
 
       <MessageInput
         message={inputMessage}

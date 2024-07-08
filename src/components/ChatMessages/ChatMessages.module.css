@@ -8,11 +8,9 @@
   }
 }
 
-.messagesContainer {
+.messagesWrapper {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.5rem;
+  flex-direction: column-reverse;
   flex-grow: 1;
   margin: 0;
   padding: 0.5rem 1rem;
@@ -20,30 +18,37 @@
   border-radius: var(--mantine-radius-sm);
   overflow-y: scroll;
 
-  & .messageBox {
-    min-width: 20%;
-    max-width: 80%;
-    padding: 0.2rem 1rem;
-    border-radius: var(--mantine-radius-lg);
+  & .messagesContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.5rem;
 
-    &.user {
-      align-self: flex-end;
-      background-color: var(--mantine-color-blue-7);
-      border-bottom-right-radius: 0;
-    }
+    & .messageBox {
+      min-width: 20%;
+      max-width: 80%;
+      padding: 0.1rem 1.1rem;
+      border-radius: var(--mantine-radius-lg);
 
-    &.assistant {
-      align-self: flex-start;
-      background-color: var(--mantine-color-dark-5);
-      border-bottom-left-radius: 0;
-    }
+      &.user {
+        align-self: flex-end;
+        background-color: var(--mantine-color-blue-7);
+        border-bottom-right-radius: 0;
+      }
 
-    &.waiting {
-      animation: waiting 2s ease-in-out infinite;
-    }
+      &.assistant {
+        align-self: flex-start;
+        background-color: var(--mantine-color-dark-5);
+        border-bottom-left-radius: 0;
+      }
 
-    &.error {
-      color: var(--mantine-color-red-6);
+      &.waiting {
+        animation: waiting 2s ease-in-out infinite;
+      }
+
+      &.error {
+        color: var(--mantine-color-red-6);
+      }
     }
   }
 }
