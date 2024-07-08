@@ -9,7 +9,7 @@ interface CodeComponentProps {
   children?: ReactNode;
 }
 
-const BlockCodeComponent = ({ children, className }: CodeComponentProps): JSX.Element | null => {
+const CodeBlock = ({ children, className }: CodeComponentProps): JSX.Element | null => {
   if (!isValidElement(children)) return null;
 
   return (
@@ -21,7 +21,7 @@ const BlockCodeComponent = ({ children, className }: CodeComponentProps): JSX.El
   );
 };
 
-const InlineCodeComponent = ({ children }: PropsWithChildren): JSX.Element => (
+const InlineCode = ({ children }: PropsWithChildren): JSX.Element => (
   <InlineCodeHighlight code={children?.toString() ?? ''} />
 );
 
@@ -51,7 +51,7 @@ export const MarkdownView: FC<MarkdownViewProps> = ({ withTyping: typing, childr
         animateCursor ? styles.animateCursor : '',
       ].join(' ')}
       remarkPlugins={[remarkGfm]}
-      components={{ pre: BlockCodeComponent, code: InlineCodeComponent }}
+      components={{ pre: CodeBlock, code: InlineCode }}
     >
       {children}
     </Markdown>
