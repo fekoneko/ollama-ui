@@ -7,15 +7,6 @@
   padding: 1rem;
 }
 
-.promptContainer {
-  display: flex;
-  gap: 0.6rem;
-
-  & :first-child {
-    flex-grow: 1;
-  }
-}
-
 .replyContainer {
   flex-grow: 1;
   margin: 0;

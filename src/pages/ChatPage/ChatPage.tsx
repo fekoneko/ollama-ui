@@ -1,16 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
-import styles from './PromptModePage.module.css';
+import styles from './ChatPage.module.css';
 import ollama from 'ollama/browser';
-import { FC, FormEvent, useRef, useState } from 'react';
-import { Button, CloseButton, Text, TextInput } from '@mantine/core';
+import { FC, useRef, useState } from 'react';
+import { Text } from '@mantine/core';
 import { TextSkeleton } from '@/components/TextSkeleton';
 import { MarkdownView } from '@/components/MarkdownView';
+import { MessageInput } from '@/components/MessageInput';
 
 interface Abortable {
   abort: () => void;
 }
 
-export const PromptModePage: FC = () => {
+export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
   const [reply, setReply] = useState<string>();
   const replyStreamRef = useRef<Abortable>();
@@ -46,32 +47,21 @@ export const PromptModePage: FC = () => {
   const isWaitingStream = isPending && reply === undefined;
   const isStreamingReply = isPending && reply !== undefined;
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    generateReply();
-  };
-
   return (
     <div className={styles.page}>
-      <form onSubmit={handleSubmit} className={styles.promptContainer}>
-        <TextInput
-          placeholder="Enter your prompt..."
-          autoFocus
-          value={prompt}
-          onChange={(e) => setPrompt(e.currentTarget.value)}
-          rightSection={<CloseButton onClick={() => setPrompt('')} />}
-        />
-        <Button type="submit" disabled={isWaitingStream}>
-          Ask AI
-        </Button>
-      </form>
-
       <div className={styles.replyContainer}>
         {isWaitingStream && <TextSkeleton />}
         {isStreamingReply && <MarkdownView withTyping>{reply}</MarkdownView>}
         {isSuccess && <MarkdownView>{reply}</MarkdownView>}
         {isError && <Text className={styles.replyError}>{error?.message}</Text>}
       </div>
+
+      <MessageInput
+        message={prompt}
+        setMessage={setPrompt}
+        onSend={() => generateReply()}
+        disabled={isWaitingStream}
+      />
     </div>
   );
 };
