@@ -3,8 +3,8 @@ import styles from './PromptModePage.module.css';
 import ollama from 'ollama/browser';
 import { FC, FormEvent, useRef, useState } from 'react';
 import { Button, CloseButton, Text, TextInput } from '@mantine/core';
-import { Typing } from '@/components/Typing';
 import { TextSkeleton } from '@/components/TextSkeleton';
+import { MarkdownView } from '@/components/MarkdownView';
 
 interface Abortable {
   abort: () => void;
@@ -68,12 +68,8 @@ export const PromptModePage: FC = () => {
 
       <div className={styles.replyContainer}>
         {isWaitingStream && <TextSkeleton />}
-        {isStreamingReply && (
-          <Text className={styles.replyText}>
-            {reply} {<Typing />}
-          </Text>
-        )}
-        {isSuccess && <Text className={styles.replyText}>{reply}</Text>}
+        {isStreamingReply && <MarkdownView withTyping>{reply}</MarkdownView>}
+        {isSuccess && <MarkdownView>{reply}</MarkdownView>}
         {isError && <Text className={styles.replyError}>{error?.message}</Text>}
       </div>
     </div>

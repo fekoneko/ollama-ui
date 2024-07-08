@@ -1,0 +1,62 @@
+@keyframes typing {
+  15%,
+  50% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+.markdownView {
+  & p {
+    margin: 0.5em 0;
+    word-wrap: break-word;
+  }
+  hr {
+    margin: 1em 0 2em 0;
+  }
+  li {
+    margin: 0.2em 0;
+  }
+
+  & blockquote {
+    border-left: 2px solid var(--mantine-color-dark-1);
+    padding: 0.1em 0 0.1em 0.6em;
+  }
+
+  & table {
+    max-width: 100%;
+    border-collapse: collapse;
+
+    & th,
+    & td {
+      padding: 0.2em 0.6em;
+      border: 1px solid var(--mantine-color-dark-1);
+    }
+    & thead {
+      background-color: var(--mantine-color-dark-6);
+    }
+  }
+}
+
+.typing {
+  & > :not(blockquote, .codeBlock, ol, ul, table):last-child::after,
+  & > blockquote:last-child > :last-child::after,
+  & > .codeBlock:last-child code:last-child::after,
+  & > :last-child li:last-child:not(:has(:last-child))::after,
+  & > :last-child li:last-child li:last-child:not(:has(:last-child))::after,
+  & > :last-child li:last-child li:last-child li:last-child:not(:has(:last-child))::after,
+  & > table:last-child tr:last-child > td:last-child::after {
+    display: inline-block;
+    content: '';
+    width: 2px;
+    height: 1.4em;
+    margin: -0.2em 0.1em;
+    background-color: var(--mantine-color-dark-1);
+  }
+
+  &.animateCursor ::after {
+    animation: typing 1s ease-in-out infinite;
+  }
+}
