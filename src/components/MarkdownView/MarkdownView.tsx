@@ -9,8 +9,9 @@ interface CodeComponentProps {
   children?: ReactNode;
 }
 
-const BlockCodeComponent = ({ children, className }: CodeComponentProps): JSX.Element => {
-  if (!isValidElement(children)) return <></>;
+const BlockCodeComponent = ({ children, className }: CodeComponentProps): JSX.Element | null => {
+  if (!isValidElement(children)) return null;
+
   return (
     <CodeHighlight
       code={children.props.children ?? ''}
@@ -25,11 +26,11 @@ const InlineCodeComponent = ({ children }: PropsWithChildren): JSX.Element => (
 );
 
 interface MarkdownViewProps {
-  typing?: boolean;
+  withTyping?: boolean;
   children?: string;
 }
 
-export const MarkdownView: FC<MarkdownViewProps> = ({ typing, children }) => {
+export const MarkdownView: FC<MarkdownViewProps> = ({ withTyping: typing, children }) => {
   const [animateCursor, setAnimateCursor] = useState(false);
 
   useEffect(() => {

@@ -70,7 +70,7 @@ export const PromptModePage: FC = () => {
         {isWaitingStream && <TextSkeleton />}
         {isStreamingReply && (
           <>
-            <MarkdownView typing>{reply}</MarkdownView>
+            <MarkdownView withTyping>{reply}</MarkdownView>
           </>
         )}
         {isSuccess && <MarkdownView>{reply}</MarkdownView>}
