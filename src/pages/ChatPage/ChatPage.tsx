@@ -49,6 +49,7 @@ export const ChatPage: FC = () => {
   });
 
   const handleSend = () => {
+    if (status === 'waiting') return;
     const newChatHistory = pushToChatHistory({ role: 'user', content: inputMessage });
     generateReply(newChatHistory);
   };
