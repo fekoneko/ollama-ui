@@ -1,5 +1,5 @@
 import { MarkdownView } from '@/components/MarkdownView';
-import { FC } from 'react';
+import { FC, RefObject } from 'react';
 import styles from './ChatMessages.module.css';
 import clsx from 'clsx';
 import { Message } from '@/types/chat';
@@ -29,22 +29,25 @@ const MessageBox: FC<MessageBoxProps> = ({ role, status, children }) => (
 export interface ChatMessagesProps {
   chatHistory: Message[];
   status: MessageStatus;
+  scrollContainerRef?: RefObject<HTMLDivElement>;
 }
 
-export const ChatMessages: FC<ChatMessagesProps> = ({ chatHistory, status }) => {
-  return (
-    <div className={styles.messagesWrapper}>
-      <div className={styles.messagesContainer}>
-        {chatHistory.map((message, index) => {
-          const isLastMessage = index === chatHistory.length - 1;
+export const ChatMessages: FC<ChatMessagesProps> = ({
+  chatHistory,
+  status,
+  scrollContainerRef,
+}) => (
+  <div ref={scrollContainerRef} className={styles.messagesWrapper}>
+    <div className={styles.messagesContainer}>
+      {chatHistory.map((message, index) => {
+        const isLastMessage = index === chatHistory.length - 1;
 
-          return (
-            <MessageBox key={index} role={message.role} status={isLastMessage ? status : 'success'}>
-              {message.content}
-            </MessageBox>
-          );
-        })}
-      </div>
+        return (
+          <MessageBox key={index} role={message.role} status={isLastMessage ? status : 'success'}>
+            {message.content}
+          </MessageBox>
+        );
+      })}
     </div>
-  );
-};
+  </div>
+);

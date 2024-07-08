@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import styles from './ChatPage.module.css';
 import ollama from 'ollama/browser';
-import { FC, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { MessageInput } from '@/components/MessageInput';
 import { ChatMessages, MessageStatus } from '@/components/ChatMessages';
 import { useChatHistory } from '@/hooks/useChatHistory';
@@ -12,8 +12,9 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [inputMessage, setInputMessage] = useState('');
-  const replyStreamRef = useRef<Abortable>();
   const { chatHistory, lastMessageFrom, pushToChatHistory, updateLastMessage } = useChatHistory();
+  const replyStreamRef = useRef<Abortable>();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const {
     mutate: generateReply,
@@ -42,6 +43,16 @@ export const ChatPage: FC = () => {
     },
   });
 
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    scrollContainer.scrollTo({
+      top: scrollContainer.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [lastMessageFrom]);
+
   const handleSend = (message: string) => {
     if (status === 'waiting') return;
     generateReply(message);
@@ -58,14 +69,20 @@ export const ChatPage: FC = () => {
 
   return (
     <div className={styles.page}>
-      <ChatMessages chatHistory={chatHistory} status={status} />
+      <div className={styles.pageInner}>
+        <ChatMessages
+          scrollContainerRef={scrollContainerRef}
+          chatHistory={chatHistory}
+          status={status}
+        />
 
-      <MessageInput
-        message={inputMessage}
-        setMessage={setInputMessage}
-        onSend={handleSend}
-        disabled={status === 'waiting'}
-      />
+        <MessageInput
+          message={inputMessage}
+          setMessage={setInputMessage}
+          onSend={handleSend}
+          disabled={status === 'waiting'}
+        />
+      </div>
     </div>
   );
 };

@@ -14,8 +14,7 @@
   flex-grow: 1;
   margin: 0;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--mantine-color-dark-4);
-  border-radius: var(--mantine-radius-sm);
+  border-bottom: 1px solid var(--mantine-color-dark-4);
   overflow-y: scroll;
 
   & .messagesContainer {
@@ -25,8 +24,8 @@
     gap: 0.5rem;
 
     & .messageBox {
-      min-width: 20%;
       max-width: 80%;
+      min-height: 2.68rem;
       padding: 0.1rem 1.1rem;
       border-radius: var(--mantine-radius-lg);
 

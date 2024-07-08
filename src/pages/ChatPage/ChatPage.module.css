@@ -1,8 +1,15 @@
 .page {
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  padding: 1rem;
+  padding: 0 2rem 0.8rem 2rem;
+
+  & .pageInner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 100%;
+    max-width: 60rem;
+  }
 }
