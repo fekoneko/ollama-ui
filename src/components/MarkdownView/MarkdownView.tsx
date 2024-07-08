@@ -3,6 +3,7 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styles from './MarkdownView.module.css';
 import { CodeHighlight, InlineCodeHighlight } from '@mantine/code-highlight';
+import clsx from 'clsx';
 
 interface CodeComponentProps {
   className?: string;
@@ -30,26 +31,26 @@ interface MarkdownViewProps {
   children?: string;
 }
 
-export const MarkdownView: FC<MarkdownViewProps> = ({ withTyping: typing, children }) => {
+export const MarkdownView: FC<MarkdownViewProps> = ({ withTyping, children }) => {
   const [animateCursor, setAnimateCursor] = useState(false);
 
   useEffect(() => {
-    if (!typing) return;
+    if (!withTyping) return;
 
     setAnimateCursor(false);
     const timeout = setTimeout(() => setAnimateCursor(true), 200);
 
     return () => clearTimeout(timeout);
-  }, [typing, children]);
+  }, [withTyping, children]);
 
   return (
     <Markdown
       skipHtml
-      className={[
+      className={clsx(
         styles.markdownView,
-        typing ? styles.typing : '',
-        animateCursor ? styles.animateCursor : '',
-      ].join(' ')}
+        withTyping && styles.typing,
+        animateCursor && styles.animateCursor,
+      )}
       remarkPlugins={[remarkGfm]}
       components={{ pre: CodeBlock, code: InlineCode }}
     >
