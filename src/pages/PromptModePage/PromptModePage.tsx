@@ -68,11 +68,7 @@ export const PromptModePage: FC = () => {
 
       <div className={styles.replyContainer}>
         {isWaitingStream && <TextSkeleton />}
-        {isStreamingReply && (
-          <>
-            <MarkdownView withTyping>{reply}</MarkdownView>
-          </>
-        )}
+        {isStreamingReply && <MarkdownView withTyping>{reply}</MarkdownView>}
         {isSuccess && <MarkdownView>{reply}</MarkdownView>}
         {isError && <Text className={styles.replyError}>{error?.message}</Text>}
       </div>
