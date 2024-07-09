@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import styles from './ChatPage.module.css';
 import ollama from 'ollama/browser';
 import { FC, useEffect, useRef, useState } from 'react';
-import { MessageInput } from '@/components/MessageInput';
+import { MessageInput } from '@/components/ChatBottomBar';
 import { ChatMessages } from '@/components/ChatMessages';
 import { useChatHistory } from '@/hooks/useChatHistory';
 import { MessageStatus } from '@/types/chat';

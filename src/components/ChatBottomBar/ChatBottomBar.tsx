@@ -1,7 +1,7 @@
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { IconLoader2, IconPlayerStop, IconSend2 } from '@tabler/icons-react';
 import { FC } from 'react';
-import styles from './MessageInput.module.css';
+import styles from './ChatBottomBar.module.css';
 import clsx from 'clsx';
 
 interface MessageInputProps {
