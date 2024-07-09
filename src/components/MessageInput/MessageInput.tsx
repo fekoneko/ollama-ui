@@ -1,5 +1,5 @@
 import { Button, CloseButton, TextInput } from '@mantine/core';
-import { IconCancel, IconLoader2, IconSend2 } from '@tabler/icons-react';
+import { IconLoader2, IconPlayerStop, IconSend2 } from '@tabler/icons-react';
 import { FC } from 'react';
 import styles from './MessageInput.module.css';
 import clsx from 'clsx';
@@ -51,7 +51,7 @@ export const MessageInput: FC<MessageInputProps> = ({
       >
         {mode === 'send' && <IconSend2 className={styles.submitIcon} title="Send message" />}
         {mode === 'cancel' && (
-          <IconCancel className={styles.submitIcon} title="Cancel generation" />
+          <IconPlayerStop className={styles.submitIcon} title="Cancel generation" />
         )}
         {mode === 'waiting' && (
           <IconLoader2

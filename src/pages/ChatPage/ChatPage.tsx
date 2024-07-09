@@ -3,8 +3,9 @@ import styles from './ChatPage.module.css';
 import ollama from 'ollama/browser';
 import { FC, useEffect, useRef, useState } from 'react';
 import { MessageInput } from '@/components/MessageInput';
-import { ChatMessages, MessageStatus } from '@/components/ChatMessages';
+import { ChatMessages } from '@/components/ChatMessages';
 import { useChatHistory } from '@/hooks/useChatHistory';
+import { MessageStatus } from '@/types/chat';
 
 interface Abortable {
   abort: () => void;

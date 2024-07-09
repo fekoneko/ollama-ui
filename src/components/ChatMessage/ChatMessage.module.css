@@ -1,0 +1,60 @@
+@keyframes waiting {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  40% {
+    opacity: 0.8;
+  }
+}
+
+.messageBox {
+  position: relative;
+  max-width: 80%;
+  min-height: 2.68rem;
+  padding: 0.1rem 1.1rem;
+  border-radius: var(--mantine-radius-lg);
+
+  &.user {
+    align-self: flex-end;
+    background-color: var(--mantine-color-blue-7);
+    border-bottom-right-radius: 0;
+  }
+
+  &.assistant {
+    align-self: flex-start;
+    background-color: var(--mantine-color-dark-5);
+    border-bottom-left-radius: 0;
+  }
+
+  &.waiting {
+    animation: waiting 2s ease-in-out infinite;
+  }
+
+  &.error {
+    &::after {
+      display: block;
+      content: '!';
+      position: absolute;
+      background-color: var(--mantine-color-red-6);
+      opacity: 0.9;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 1.2rem;
+      font-size: 0.9rem;
+      line-height: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    &.user::after {
+      bottom: -0.2rem;
+      left: -0.6rem;
+    }
+
+    &.assistant::after {
+      bottom: -0.2rem;
+      right: 0.6rem;
+    }
+  }
+}

@@ -1,30 +1,7 @@
-import { MarkdownView } from '@/components/MarkdownView';
 import { FC, RefObject } from 'react';
 import styles from './ChatMessages.module.css';
-import clsx from 'clsx';
-import { Message } from '@/types/chat';
-
-export type MessageStatus = 'waiting' | 'streaming' | 'success' | 'error';
-
-export interface MessageBoxProps {
-  role: 'user' | 'assistant';
-  status: MessageStatus;
-  children?: string;
-}
-
-const MessageBox: FC<MessageBoxProps> = ({ role, status, children }) => (
-  <div
-    className={clsx(
-      styles.messageBox,
-      role === 'user' && styles.user,
-      role === 'assistant' && styles.assistant,
-      status === 'waiting' && styles.waiting,
-      status === 'error' && styles.error,
-    )}
-  >
-    <MarkdownView withTyping={status === 'streaming'}>{children}</MarkdownView>
-  </div>
-);
+import { Message, MessageStatus } from '@/types/chat';
+import { ChatMessage } from '@/components/ChatMessage/ChatMessage';
 
 export interface ChatMessagesProps {
   chatHistory: Message[];
@@ -43,9 +20,9 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
         const isLastMessage = index === chatHistory.length - 1;
 
         return (
-          <MessageBox key={index} role={message.role} status={isLastMessage ? status : 'success'}>
+          <ChatMessage key={index} role={message.role} status={isLastMessage ? status : 'success'}>
             {message.content}
-          </MessageBox>
+          </ChatMessage>
         );
       })}
     </div>
