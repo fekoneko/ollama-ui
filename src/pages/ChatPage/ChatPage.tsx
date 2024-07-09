@@ -53,9 +53,10 @@ export const ChatPage: FC = () => {
     });
   }, [lastMessageFrom]);
 
-  const handleSend = (message: string) => {
+  const handleSend = () => {
     if (status === 'waiting') return;
-    generateReply(message);
+    generateReply(inputMessage);
+    setInputMessage('');
   };
 
   const status: MessageStatus =

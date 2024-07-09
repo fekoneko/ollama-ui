@@ -6,15 +6,14 @@ import styles from './MessageInput.module.css';
 interface MessageInputProps {
   message: string;
   setMessage: (message: string) => void;
-  onSend: (message: string) => void;
+  onSend: () => void;
   disabled?: boolean;
 }
 
 export const MessageInput: FC<MessageInputProps> = ({ message, setMessage, onSend, disabled }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSend(message);
-    setMessage('');
+    onSend();
   };
 
   return (
