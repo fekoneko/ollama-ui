@@ -73,7 +73,7 @@ export const ChatPage: FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.pageInner}>
-        <ChatMessages ref={scrollContainerRef} chatHistory={chatHistory} status={status} />
+        <ChatMessages ref={scrollContainerRef} chatHistory={chatHistory} messageStatus={status} />
 
         <MessageInput
           message={inputMessage}

@@ -5,11 +5,11 @@ import { ChatMessage } from '@/components/ChatMessage/ChatMessage';
 
 export interface ChatMessagesProps {
   chatHistory: Message[];
-  status: MessageStatus;
+  messageStatus: MessageStatus;
 }
 
 export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
-  ({ chatHistory, status }, ref) => (
+  ({ chatHistory, messageStatus }, ref) => (
     <div ref={ref} className={styles.messagesWrapper}>
       <div className={styles.messagesContainer}>
         {chatHistory.map((message, index) => {
@@ -19,7 +19,7 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
             <ChatMessage
               key={index}
               role={message.role}
-              status={isLastMessage ? status : 'success'}
+              messageStatus={isLastMessage ? messageStatus : 'success'}
             >
               {message.content}
             </ChatMessage>
