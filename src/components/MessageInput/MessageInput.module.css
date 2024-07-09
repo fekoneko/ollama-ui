@@ -1,3 +1,12 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .form {
   display: flex;
   gap: 0.5rem;
@@ -35,6 +44,10 @@
     & .submitIcon {
       width: 1.2rem;
       height: 1.2rem;
+
+      &.loadingSpinner {
+        animation: spin 1s linear infinite;
+      }
     }
   }
 }

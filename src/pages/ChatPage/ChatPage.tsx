@@ -81,10 +81,9 @@ export const ChatPage: FC = () => {
         <MessageInput
           message={inputMessage}
           setMessage={setInputMessage}
-          mode={status === 'streaming' ? 'cancel' : 'send'}
+          mode={status === 'waiting' ? 'waiting' : status === 'streaming' ? 'cancel' : 'send'}
           onSend={handleSend}
           onCancel={handleCancel}
-          disabled={status === 'waiting'}
         />
       </div>
     </div>

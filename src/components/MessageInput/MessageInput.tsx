@@ -1,15 +1,15 @@
 import { Button, CloseButton, TextInput } from '@mantine/core';
-import { IconCancel, IconSend2 } from '@tabler/icons-react';
+import { IconCancel, IconLoader2, IconSend2 } from '@tabler/icons-react';
 import { FC } from 'react';
 import styles from './MessageInput.module.css';
+import clsx from 'clsx';
 
 interface MessageInputProps {
   message: string;
   setMessage: (message: string) => void;
-  mode: 'send' | 'cancel';
+  mode: 'send' | 'cancel' | 'waiting';
   onSend?: () => void;
   onCancel?: () => void;
-  disabled?: boolean;
 }
 
 export const MessageInput: FC<MessageInputProps> = ({
@@ -18,14 +18,12 @@ export const MessageInput: FC<MessageInputProps> = ({
   mode,
   onSend,
   onCancel,
-  disabled,
 }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (disabled) return;
 
     if (mode === 'send') onSend?.();
-    else onCancel?.();
+    else if (mode === 'cancel') onCancel?.();
   };
 
   return (
@@ -48,11 +46,19 @@ export const MessageInput: FC<MessageInputProps> = ({
 
       <Button
         type="submit"
-        disabled={disabled || (!message && mode === 'send')}
+        disabled={mode === 'waiting' || (!message && mode === 'send')}
         classNames={{ root: styles.submitButtonRoot, label: styles.submitButtonLabel }}
       >
-        {mode === 'send' && <IconSend2 className={styles.submitIcon} />}
-        {mode === 'cancel' && <IconCancel className={styles.submitIcon} />}
+        {mode === 'send' && <IconSend2 className={styles.submitIcon} title="Send message" />}
+        {mode === 'cancel' && (
+          <IconCancel className={styles.submitIcon} title="Cancel generation" />
+        )}
+        {mode === 'waiting' && (
+          <IconLoader2
+            className={clsx(styles.submitIcon, styles.loadingSpinner)}
+            title="Waiting for response..."
+          />
+        )}
       </Button>
     </form>
   );
