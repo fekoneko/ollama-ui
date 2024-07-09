@@ -12,13 +12,8 @@ interface Abortable {
 }
 
 export const ChatPage: FC = () => {
-  const [inputMessage, setInputMessage] = useState('');
-  const {
-    messages: chatHistory,
-    lastMessageRole: lastMessageFrom,
-    addMessage: pushToChatHistory,
-    updateLastMessageContent: updateLastMessage,
-  } = useChat();
+  const [prompt, setPrompt] = useState('');
+  const { messages, lastMessageRole, addMessage, updateLastMessageContent } = useChat();
   const replyStreamRef = useRef<Abortable>();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -30,18 +25,18 @@ export const ChatPage: FC = () => {
     mutationKey: ['generate'],
     mutationFn: async (message: string) => {
       replyStreamRef.current?.abort();
-      const newChatHistory = pushToChatHistory({ role: 'user', content: message });
+      const newChatHistory = addMessage({ role: 'user', content: message });
 
       return await ollama.chat({ model: 'llama3', messages: newChatHistory, stream: true });
     },
 
     onSuccess: async (stream) => {
       replyStreamRef.current = stream;
-      pushToChatHistory({ role: 'assistant', content: '' });
+      addMessage({ role: 'assistant', content: '' });
 
       try {
         for await (const chunk of stream) {
-          updateLastMessage((prev) => prev + chunk.message.content);
+          updateLastMessageContent((prev) => prev + chunk.message.content);
         }
       } catch (error: any) {
         if (error.name !== 'AbortError') throw error;
@@ -57,19 +52,19 @@ export const ChatPage: FC = () => {
       top: scrollContainer.scrollHeight,
       behavior: 'smooth',
     });
-  }, [lastMessageFrom]);
+  }, [lastMessageRole]);
 
   const handleSend = () => {
-    generateReply(inputMessage);
-    setInputMessage('');
+    generateReply(prompt);
+    setPrompt('');
   };
 
   const handleCancel = () => replyStreamRef.current?.abort();
 
   const status: MessageStatus =
-    isPending && lastMessageFrom === 'user'
+    isPending && lastMessageRole === 'user'
       ? 'waiting'
-      : isPending && lastMessageFrom === 'assistant'
+      : isPending && lastMessageRole === 'assistant'
         ? 'streaming'
         : isSuccess
           ? 'success'
@@ -78,11 +73,11 @@ export const ChatPage: FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.pageInner}>
-        <ChatMessages ref={scrollContainerRef} chatHistory={chatHistory} messageStatus={status} />
+        <ChatMessages ref={scrollContainerRef} chatHistory={messages} messageStatus={status} />
 
         <MessageInput
-          message={inputMessage}
-          setMessage={setInputMessage}
+          message={prompt}
+          setMessage={setPrompt}
           mode={status === 'waiting' ? 'waiting' : status === 'streaming' ? 'cancel' : 'send'}
           onSend={handleSend}
           onCancel={handleCancel}
