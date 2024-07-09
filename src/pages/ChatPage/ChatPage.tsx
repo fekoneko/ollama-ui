@@ -4,7 +4,7 @@ import ollama from 'ollama/browser';
 import { FC, useEffect, useRef, useState } from 'react';
 import { MessageInput } from '@/components/ChatBottomBar';
 import { ChatMessages } from '@/components/ChatMessages';
-import { useChatHistory } from '@/hooks/useChatHistory';
+import { useChat } from '@/hooks/useChat';
 import { MessageStatus } from '@/types/chat';
 
 interface Abortable {
@@ -13,7 +13,12 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [inputMessage, setInputMessage] = useState('');
-  const { chatHistory, lastMessageFrom, pushToChatHistory, updateLastMessage } = useChatHistory();
+  const {
+    messages: chatHistory,
+    lastMessageRole: lastMessageFrom,
+    addMessage: pushToChatHistory,
+    updateLastMessageContent: updateLastMessage,
+  } = useChat();
   const replyStreamRef = useRef<Abortable>();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
