@@ -11,9 +11,9 @@ export const useChat = () => {
 
   const addMessage = useCallback(
     (message: Message) => {
-      const newChatHistory = [...messages, message];
-      setMessages(newChatHistory);
-      return newChatHistory;
+      const updatedMessages = [...messages, message];
+      setMessages(updatedMessages);
+      return updatedMessages;
     },
     [messages],
   );

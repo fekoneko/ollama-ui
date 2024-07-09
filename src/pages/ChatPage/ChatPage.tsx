@@ -25,9 +25,9 @@ export const ChatPage: FC = () => {
     mutationKey: ['generate'],
     mutationFn: async (message: string) => {
       replyStreamRef.current?.abort();
-      const newChatHistory = addMessage({ role: 'user', content: message });
+      const updatedMessages = addMessage({ role: 'user', content: message });
 
-      return await ollama.chat({ model: 'llama3', messages: newChatHistory, stream: true });
+      return await ollama.chat({ model: 'llama3', messages: updatedMessages, stream: true });
     },
 
     onSuccess: async (stream) => {
@@ -73,7 +73,7 @@ export const ChatPage: FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.pageInner}>
-        <ChatMessages ref={scrollContainerRef} chatHistory={messages} messageStatus={status} />
+        <ChatMessages ref={scrollContainerRef} messages={messages} messageStatus={status} />
 
         <MessageInput
           message={prompt}
