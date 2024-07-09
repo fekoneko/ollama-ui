@@ -46,11 +46,10 @@ export const MarkdownView: FC<MarkdownViewProps> = ({ withTyping, children }) =>
   return (
     <Markdown
       skipHtml
-      className={clsx(
-        styles.markdownView,
-        withTyping && styles.typing,
-        animateCursor && styles.animateCursor,
-      )}
+      className={clsx(styles.markdownView, {
+        [styles.typing]: withTyping,
+        [styles.animateCursor]: animateCursor,
+      })}
       remarkPlugins={[remarkGfm]}
       components={{ pre: CodeBlock, code: InlineCode }}
     >

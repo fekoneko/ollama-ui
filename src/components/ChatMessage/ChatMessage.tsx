@@ -12,13 +12,12 @@ export interface ChatMessageProps {
 
 export const ChatMessage: FC<ChatMessageProps> = ({ role, messageStatus, children }) => (
   <div
-    className={clsx(
-      styles.messageBox,
-      role === 'user' && styles.user,
-      role === 'assistant' && styles.assistant,
-      messageStatus === 'waiting' && styles.waiting,
-      messageStatus === 'error' && styles.error,
-    )}
+    className={clsx(styles.messageBox, {
+      [styles.user]: role === 'user',
+      [styles.assistant]: role === 'assistant',
+      [styles.waiting]: messageStatus === 'waiting',
+      [styles.error]: messageStatus === 'error',
+    })}
   >
     <MarkdownView withTyping={messageStatus === 'streaming'}>{children}</MarkdownView>
   </div>
