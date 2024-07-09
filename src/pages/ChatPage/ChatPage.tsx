@@ -54,10 +54,11 @@ export const ChatPage: FC = () => {
   }, [lastMessageFrom]);
 
   const handleSend = () => {
-    if (status === 'waiting') return;
     generateReply(inputMessage);
     setInputMessage('');
   };
+
+  const handleCancel = () => replyStreamRef.current?.abort();
 
   const status: MessageStatus =
     isPending && lastMessageFrom === 'user'
@@ -80,7 +81,9 @@ export const ChatPage: FC = () => {
         <MessageInput
           message={inputMessage}
           setMessage={setInputMessage}
+          mode={status === 'streaming' ? 'cancel' : 'send'}
           onSend={handleSend}
+          onCancel={handleCancel}
           disabled={status === 'waiting'}
         />
       </div>

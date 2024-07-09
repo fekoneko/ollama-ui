@@ -23,16 +23,16 @@
     }
   }
 
-  & .sendButtonRoot {
+  & .submitButtonRoot {
     height: 2.5rem;
     border-radius: 10rem;
 
-    & .sendButtonLabel {
+    & .submitButtonLabel {
       display: flex;
       gap: 0.4rem;
     }
 
-    & .sendIcon {
+    & .submitIcon {
       width: 1.2rem;
       height: 1.2rem;
     }
