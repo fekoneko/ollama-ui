@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import styles from './ChatPage.module.css';
 import ollama from 'ollama/browser';
 import { FC, useEffect, useRef, useState } from 'react';
-import { MessageInput } from '@/components/ChatBottomBar';
+import { ChatBottomBar } from '@/components/ChatBottomBar';
 import { ChatMessages } from '@/components/ChatMessages';
 import { useChat } from '@/hooks/useChat';
 import { MessageStatus } from '@/types/chat';
@@ -75,9 +75,9 @@ export const ChatPage: FC = () => {
       <div className={styles.pageInner}>
         <ChatMessages ref={scrollContainerRef} messages={messages} messageStatus={status} />
 
-        <MessageInput
-          message={prompt}
-          setMessage={setPrompt}
+        <ChatBottomBar
+          prompt={prompt}
+          setPrompt={setPrompt}
           mode={status === 'waiting' ? 'waiting' : status === 'streaming' ? 'cancel' : 'send'}
           onSend={handleSend}
           onCancel={handleCancel}

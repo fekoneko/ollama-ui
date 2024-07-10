@@ -4,17 +4,17 @@ import { FC } from 'react';
 import styles from './ChatBottomBar.module.css';
 import clsx from 'clsx';
 
-interface MessageInputProps {
-  message: string;
-  setMessage: (message: string) => void;
+interface ChatBottomBarProps {
+  prompt: string;
+  setPrompt: (message: string) => void;
   mode: 'send' | 'cancel' | 'waiting';
   onSend?: () => void;
   onCancel?: () => void;
 }
 
-export const MessageInput: FC<MessageInputProps> = ({
-  message,
-  setMessage,
+export const ChatBottomBar: FC<ChatBottomBarProps> = ({
+  prompt,
+  setPrompt,
   mode,
   onSend,
   onCancel,
@@ -32,10 +32,10 @@ export const MessageInput: FC<MessageInputProps> = ({
         placeholder="Enter your message..."
         autoFocus
         autoComplete="off"
-        value={message}
-        onChange={(e) => setMessage(e.currentTarget.value)}
+        value={prompt}
+        onChange={(e) => setPrompt(e.currentTarget.value)}
         rightSection={
-          message && <CloseButton onClick={() => setMessage('')} className={styles.clearButton} />
+          prompt && <CloseButton onClick={() => setPrompt('')} className={styles.clearButton} />
         }
         classNames={{
           root: styles.inputRoot,
@@ -46,7 +46,7 @@ export const MessageInput: FC<MessageInputProps> = ({
 
       <Button
         type="submit"
-        disabled={mode === 'waiting' || (!message && mode === 'send')}
+        disabled={mode === 'waiting' || (!prompt && mode === 'send')}
         classNames={{ root: styles.submitButtonRoot, label: styles.submitButtonLabel }}
       >
         {mode === 'send' && <IconSend2 className={styles.submitIcon} title="Send message" />}
