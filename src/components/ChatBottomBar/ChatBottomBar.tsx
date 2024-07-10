@@ -7,9 +7,9 @@ import clsx from 'clsx';
 interface ChatBottomBarProps {
   prompt: string;
   setPrompt: (message: string) => void;
-  mode: 'send' | 'cancel' | 'waiting';
+  mode: 'send' | 'stop' | 'waiting';
   onSend?: () => void;
-  onCancel?: () => void;
+  onStop?: () => void;
 }
 
 export const ChatBottomBar: FC<ChatBottomBarProps> = ({
@@ -17,13 +17,13 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
   setPrompt,
   mode,
   onSend,
-  onCancel,
+  onStop,
 }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (mode === 'send') onSend?.();
-    else if (mode === 'cancel') onCancel?.();
+    else if (mode === 'stop') onStop?.();
   };
 
   return (
@@ -50,7 +50,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
         classNames={{ root: styles.submitButtonRoot, label: styles.submitButtonLabel }}
       >
         {mode === 'send' && <IconSend2 className={styles.submitIcon} title="Send message" />}
-        {mode === 'cancel' && (
+        {mode === 'stop' && (
           <IconPlayerStop className={styles.submitIcon} title="Cancel generation" />
         )}
         {mode === 'waiting' && (

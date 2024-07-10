@@ -15,7 +15,7 @@ export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
   const { messages, lastMessage, addMessage, updateLastMessageContent } = useChat();
   const replyStreamRef = useRef<Abortable>();
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const chatMessagesRef = useRef<HTMLDivElement>(null);
 
   const {
     mutate: generateReply,
@@ -45,11 +45,11 @@ export const ChatPage: FC = () => {
   });
 
   useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer) return;
+    const chatMessages = chatMessagesRef.current;
+    if (!chatMessages) return;
 
-    scrollContainer.scrollTo({
-      top: scrollContainer.scrollHeight,
+    chatMessages.scrollTo({
+      top: chatMessages.scrollHeight,
       behavior: 'smooth',
     });
   }, [lastMessage]);
@@ -59,7 +59,7 @@ export const ChatPage: FC = () => {
     setPrompt('');
   };
 
-  const handleCancel = () => replyStreamRef.current?.abort();
+  const handleStop = () => replyStreamRef.current?.abort();
 
   const status: MessageStatus =
     isPending && lastMessage?.role === 'user'
@@ -73,14 +73,14 @@ export const ChatPage: FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.pageInner}>
-        <ChatMessages ref={scrollContainerRef} messages={messages} messageStatus={status} />
+        <ChatMessages ref={chatMessagesRef} messages={messages} messageStatus={status} />
 
         <ChatBottomBar
           prompt={prompt}
           setPrompt={setPrompt}
-          mode={status === 'waiting' ? 'waiting' : status === 'streaming' ? 'cancel' : 'send'}
+          mode={status === 'waiting' ? 'waiting' : status === 'streaming' ? 'stop' : 'send'}
           onSend={handleSend}
-          onCancel={handleCancel}
+          onStop={handleStop}
         />
       </div>
     </div>
