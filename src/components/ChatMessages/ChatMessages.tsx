@@ -18,11 +18,9 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
           return (
             <ChatMessage
               key={index}
-              role={message.role}
+              message={message}
               messageStatus={isLastMessage ? messageStatus : 'success'}
-            >
-              {message.content}
-            </ChatMessage>
+            />
           );
         })}
       </div>
