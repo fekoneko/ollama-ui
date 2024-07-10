@@ -3,11 +3,12 @@ import { IconLoader2, IconPlayerStop, IconSend2 } from '@tabler/icons-react';
 import { FC } from 'react';
 import styles from './ChatBottomBar.module.css';
 import clsx from 'clsx';
+import { Message } from '@/types/chat';
 
 interface ChatBottomBarProps {
   prompt: string;
   setPrompt: (message: string) => void;
-  mode: 'send' | 'stop' | 'waiting';
+  lastMessage?: Message;
   onSend?: () => void;
   onStop?: () => void;
 }
@@ -15,15 +16,19 @@ interface ChatBottomBarProps {
 export const ChatBottomBar: FC<ChatBottomBarProps> = ({
   prompt,
   setPrompt,
-  mode,
+  lastMessage,
   onSend,
   onStop,
 }) => {
+  const isLoading = lastMessage?.role === 'user' && lastMessage?.status === 'pending';
+  const isActionStop = lastMessage?.role === 'assistant' && lastMessage?.status === 'pending';
+  const isActionSend = !isLoading && !isActionStop;
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (mode === 'send') onSend?.();
-    else if (mode === 'stop') onStop?.();
+    if (isActionSend) onSend?.();
+    else if (isActionStop) onStop?.();
   };
 
   return (
@@ -35,7 +40,9 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
         value={prompt}
         onChange={(e) => setPrompt(e.currentTarget.value)}
         rightSection={
-          prompt && <CloseButton onClick={() => setPrompt('')} className={styles.clearButton} />
+          prompt.length > 0 && (
+            <CloseButton onClick={() => setPrompt('')} className={styles.clearButton} />
+          )
         }
         classNames={{
           root: styles.inputRoot,
@@ -46,14 +53,12 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
 
       <ActionIcon
         type="submit"
-        disabled={mode === 'waiting' || (!prompt && mode === 'send')}
+        disabled={isLoading || (prompt.length === 0 && isActionSend)}
         classNames={{ root: styles.submitButtonRoot }}
       >
-        {mode === 'send' && <IconSend2 className={styles.submitIcon} title="Send message" />}
-        {mode === 'stop' && (
-          <IconPlayerStop className={styles.submitIcon} title="Cancel generation" />
-        )}
-        {mode === 'waiting' && (
+        {isActionSend && <IconSend2 className={styles.submitIcon} title="Send message" />}
+        {isActionStop && <IconPlayerStop className={styles.submitIcon} title="Cancel generation" />}
+        {isLoading && (
           <IconLoader2
             className={clsx(styles.submitIcon, styles.loadingSpinner)}
             title="Waiting for response..."

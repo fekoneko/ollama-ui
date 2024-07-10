@@ -87,13 +87,7 @@ export const ChatPage: FC = () => {
         <ChatBottomBar
           prompt={prompt}
           setPrompt={setPrompt}
-          mode={
-            lastMessage?.role === 'user' && lastMessage?.status === 'pending'
-              ? 'waiting'
-              : lastMessage?.role === 'assistant' && lastMessage?.status === 'pending'
-                ? 'stop'
-                : 'send'
-          }
+          lastMessage={lastMessage}
           onSend={handleSend}
           onStop={handleStop}
         />
