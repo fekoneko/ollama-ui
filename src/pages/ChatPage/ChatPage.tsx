@@ -13,7 +13,7 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
-  const { messages, lastMessageRole, addMessage, updateLastMessageContent } = useChat();
+  const { messages, lastMessage, addMessage, updateLastMessageContent } = useChat();
   const replyStreamRef = useRef<Abortable>();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +52,7 @@ export const ChatPage: FC = () => {
       top: scrollContainer.scrollHeight,
       behavior: 'smooth',
     });
-  }, [lastMessageRole]);
+  }, [lastMessage]);
 
   const handleSend = () => {
     generateReply(prompt);
@@ -62,9 +62,9 @@ export const ChatPage: FC = () => {
   const handleCancel = () => replyStreamRef.current?.abort();
 
   const status: MessageStatus =
-    isPending && lastMessageRole === 'user'
+    isPending && lastMessage?.role === 'user'
       ? 'waiting'
-      : isPending && lastMessageRole === 'assistant'
+      : isPending && lastMessage?.role === 'assistant'
         ? 'streaming'
         : isSuccess
           ? 'success'
