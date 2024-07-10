@@ -32,7 +32,7 @@ export const useChat = () => {
     [updateLastMessage],
   );
 
-  const clear = useCallback(() => setMessages([]), [setMessages]);
+  const clearMessages = useCallback(() => setMessages([]), [setMessages]);
 
   useEffect(() => {
     const setErrorOnPendingMessages = () =>
@@ -54,6 +54,6 @@ export const useChat = () => {
     updateLastMessage,
     appendToLastMessage,
     updateLastMessageStatus,
-    clear,
+    clearMessages: clearMessages,
   };
 };

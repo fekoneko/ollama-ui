@@ -6,6 +6,7 @@ import { ChatBottomBar } from '@/components/ChatBottomBar';
 import { ChatMessages } from '@/components/ChatMessages';
 import { useChat } from '@/hooks/useChat';
 import { Message } from '@/types/chat';
+import { ChatHeader } from '@/components/ChatHeader';
 
 interface Abortable {
   abort: () => void;
@@ -13,8 +14,15 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
-  const { messages, lastMessage, addMessage, appendToLastMessage, updateLastMessageStatus } =
-    useChat();
+  const [model] = useState('llama3');
+  const {
+    messages,
+    lastMessage,
+    addMessage,
+    appendToLastMessage,
+    updateLastMessageStatus,
+    clearMessages,
+  } = useChat();
   const replyStreamRef = useRef<Abortable>();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
@@ -26,7 +34,7 @@ export const ChatPage: FC = () => {
       addMessage(newMessage);
 
       return await ollama.chat({
-        model: 'llama3',
+        model,
         messages: [...messages, newMessage],
         stream: true,
       });
@@ -44,7 +52,7 @@ export const ChatPage: FC = () => {
         updateLastMessageStatus('success');
       } catch (error: any) {
         updateLastMessageStatus('error');
-        if (error.name !== 'AbortError') throw error;
+        if (error?.name !== 'AbortError') throw error;
       }
     },
 
@@ -61,7 +69,7 @@ export const ChatPage: FC = () => {
       top: chatMessages.scrollHeight,
       behavior: 'smooth',
     });
-  }, [lastMessage]);
+  }, [lastMessage?.role]);
 
   const handleSend = () => {
     generateReply(prompt);
@@ -73,6 +81,7 @@ export const ChatPage: FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.pageInner}>
+        <ChatHeader model={model} onClear={clearMessages} />
         <ChatMessages ref={chatMessagesRef} messages={messages} />
 
         <ChatBottomBar

@@ -1,0 +1,69 @@
+.chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0.6rem;
+  border-bottom: 1px solid var(--mantine-color-dark-4);
+
+  & .leftSection {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+
+    & .siteTitle {
+      font-size: 1.5rem;
+      line-height: 1.5rem;
+      font-weight: 700;
+      color: var(--mantine-color-dark-1);
+      padding: 0.3rem;
+      margin: 0;
+      border-radius: var(--mantine-radius-md);
+    }
+
+    & .separator {
+      font-size: 1.5rem;
+      line-height: 1.5rem;
+      font-weight: 700;
+      color: var(--mantine-color-dark-2);
+      margin: 0;
+    }
+
+    & .modelNameContainer {
+      display: flex;
+      align-items: center;
+      border-radius: var(--mantine-radius-md);
+
+      & .modelName {
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        font-weight: 500;
+        color: var(--mantine-color-dark-1);
+        padding: 0.3rem;
+        margin: 0;
+      }
+
+      & .sparkles {
+        position: relative;
+        top: 0.3rem;
+
+        & * {
+          color: var(--mantine-color-dark-2);
+        }
+      }
+    }
+  }
+
+  & .clearButton {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+
+    & * {
+      color: var(--mantine-color-dark-2);
+    }
+
+    &:hover * {
+      color: var(--mantine-color-dark-1);
+    }
+  }
+}
