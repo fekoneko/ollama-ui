@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { Message } from '@/types/chat';
+import { Message, MessageStatus } from '@/types/chat';
 import { useLocalStorage } from '@mantine/hooks';
 
 export const useChat = () => {
@@ -16,25 +16,35 @@ export const useChat = () => {
   );
 
   const updateLastMessage = useCallback(
-    (setMessage: (prev: Message) => Message) => {
-      setMessages((prev) => [...prev.slice(0, -1), setMessage(prev[prev.length - 1])]);
-    },
+    (setMessage: (prev: Message) => Message) =>
+      setMessages((prev) => [...prev.slice(0, -1), setMessage(prev[prev.length - 1])]),
     [setMessages],
+  );
+
+  const appendToLastMessage = useCallback(
+    (appendedContent: string) =>
+      updateLastMessage((prev) => ({ ...prev, content: prev.content + appendedContent })),
+    [updateLastMessage],
+  );
+
+  const updateLastMessageStatus = useCallback(
+    (newStatus: MessageStatus) => updateLastMessage((prev) => ({ ...prev, status: newStatus })),
+    [updateLastMessage],
   );
 
   const clear = useCallback(() => setMessages([]), [setMessages]);
 
   useEffect(() => {
-    const setErrorOnWaitingMessages = () =>
+    const setErrorOnPendingMessages = () =>
       setMessages((prev) =>
         prev.map((message) => ({
           ...message,
-          status: message.status === 'waiting' ? 'error' : message.status,
+          status: message.status === 'pending' ? 'error' : message.status,
         })),
       );
 
-    addEventListener('beforeunload', setErrorOnWaitingMessages);
-    return () => removeEventListener('beforeunload', setErrorOnWaitingMessages);
+    addEventListener('beforeunload', setErrorOnPendingMessages);
+    return () => removeEventListener('beforeunload', setErrorOnPendingMessages);
   }, [setMessages]);
 
   return {
@@ -42,6 +52,8 @@ export const useChat = () => {
     lastMessage,
     addMessage,
     updateLastMessage,
+    appendToLastMessage,
+    updateLastMessageStatus,
     clear,
   };
 };

@@ -13,10 +13,12 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => (
     className={clsx(styles.messageBox, {
       [styles.user]: message.role === 'user',
       [styles.assistant]: message.role === 'assistant',
-      [styles.waiting]: message.status === 'waiting',
+      [styles.pending]: message.status === 'pending',
       [styles.error]: message.status === 'error',
     })}
   >
-    <MarkdownView withTyping={message.status === 'streaming'}>{message.content}</MarkdownView>
+    <MarkdownView withTyping={message.role === 'assistant' && message.status === 'pending'}>
+      {message.content}
+    </MarkdownView>
   </div>
 );

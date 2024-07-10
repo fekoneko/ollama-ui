@@ -27,7 +27,7 @@
     border-bottom-left-radius: 0;
   }
 
-  &.waiting {
+  &.user.pending {
     animation: waiting 2s ease-in-out infinite;
   }
 

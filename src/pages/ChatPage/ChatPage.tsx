@@ -13,15 +13,16 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
-  const { messages, lastMessage, addMessage, updateLastMessage } = useChat();
+  const { messages, lastMessage, addMessage, appendToLastMessage, updateLastMessageStatus } =
+    useChat();
   const replyStreamRef = useRef<Abortable>();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
   const { mutate: generateReply } = useMutation({
     mutationKey: ['generate'],
-    mutationFn: async (message: string) => {
+    mutationFn: async (prompt: string) => {
       replyStreamRef.current?.abort();
-      const newMessage: Message = { role: 'user', content: message, status: 'waiting' };
+      const newMessage: Message = { role: 'user', content: prompt, status: 'pending' };
       addMessage(newMessage);
 
       return await ollama.chat({
@@ -33,22 +34,22 @@ export const ChatPage: FC = () => {
 
     onSuccess: async (stream) => {
       replyStreamRef.current = stream;
-      updateLastMessage((prev) => ({ ...prev, status: 'success' }));
-      addMessage({ role: 'assistant', content: '', status: 'streaming' });
+      updateLastMessageStatus('success');
+      addMessage({ role: 'assistant', content: '', status: 'pending' });
 
       try {
         for await (const chunk of stream) {
-          updateLastMessage((prev) => ({ ...prev, content: prev.content + chunk.message.content }));
+          appendToLastMessage(chunk.message.content);
         }
-        updateLastMessage((prev) => ({ ...prev, status: 'success' }));
+        updateLastMessageStatus('success');
       } catch (error: any) {
+        updateLastMessageStatus('error');
         if (error.name !== 'AbortError') throw error;
-        updateLastMessage((prev) => ({ ...prev, status: 'error' }));
       }
     },
 
     onError: () => {
-      updateLastMessage((prev) => ({ ...prev, status: 'error' }));
+      updateLastMessageStatus('error');
     },
   });
 
@@ -78,9 +79,9 @@ export const ChatPage: FC = () => {
           prompt={prompt}
           setPrompt={setPrompt}
           mode={
-            lastMessage?.status === 'waiting'
+            lastMessage?.role === 'user' && lastMessage?.status === 'pending'
               ? 'waiting'
-              : lastMessage?.status === 'streaming'
+              : lastMessage?.role === 'assistant' && lastMessage?.status === 'pending'
                 ? 'stop'
                 : 'send'
           }
