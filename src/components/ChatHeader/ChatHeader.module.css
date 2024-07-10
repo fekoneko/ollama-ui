@@ -24,13 +24,13 @@
       font-size: 1.5rem;
       line-height: 1.5rem;
       font-weight: 700;
-      color: var(--mantine-color-dark-2);
+      color: var(--mantine-color-dark-3);
       margin: 0;
     }
 
     & .modelNameContainer {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       border-radius: var(--mantine-radius-md);
 
       & .modelName {
@@ -44,7 +44,8 @@
 
       & .sparkles {
         position: relative;
-        top: 0.3rem;
+        top: 0.25rem;
+        line-height: 0;
 
         & * {
           color: var(--mantine-color-dark-2);
