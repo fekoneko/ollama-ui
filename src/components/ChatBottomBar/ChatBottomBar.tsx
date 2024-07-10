@@ -1,4 +1,4 @@
-import { Button, CloseButton, TextInput } from '@mantine/core';
+import { ActionIcon, CloseButton, TextInput } from '@mantine/core';
 import { IconLoader2, IconPlayerStop, IconSend2 } from '@tabler/icons-react';
 import { FC } from 'react';
 import styles from './ChatBottomBar.module.css';
@@ -44,10 +44,10 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
         }}
       />
 
-      <Button
+      <ActionIcon
         type="submit"
         disabled={mode === 'waiting' || (!prompt && mode === 'send')}
-        classNames={{ root: styles.submitButtonRoot, label: styles.submitButtonLabel }}
+        classNames={{ root: styles.submitButtonRoot }}
       >
         {mode === 'send' && <IconSend2 className={styles.submitIcon} title="Send message" />}
         {mode === 'stop' && (
@@ -59,7 +59,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
             title="Waiting for response..."
           />
         )}
-      </Button>
+      </ActionIcon>
     </form>
   );
 };

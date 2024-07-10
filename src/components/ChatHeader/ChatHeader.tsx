@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core';
+import { ActionIcon } from '@mantine/core';
 import { IconSparkles, IconTrash } from '@tabler/icons-react';
 import { FC } from 'react';
 import styles from './ChatHeader.module.css';
@@ -25,8 +25,13 @@ export const ChatHeader: FC<ChatHeaderProps> = ({ model, onClear }) => (
       </div>
     </div>
 
-    <Button onClick={onClear} variant="subtle" title="Clear chat" className={styles.clearButton}>
+    <ActionIcon
+      onClick={onClear}
+      variant="subtle"
+      title="Clear chat"
+      className={styles.clearButton}
+    >
       <IconTrash />
-    </Button>
+    </ActionIcon>
   </header>
 );
