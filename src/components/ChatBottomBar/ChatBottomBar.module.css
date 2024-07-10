@@ -1,0 +1,53 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.form {
+  display: flex;
+  gap: 0.5rem;
+
+  & .inputRoot {
+    flex-grow: 1;
+
+    & .input {
+      height: 2.5rem;
+      padding: 0 1.2rem;
+      border-radius: 10rem;
+    }
+
+    & .inputRightSection {
+      width: 2.5rem;
+
+      & .clearButton {
+        width: 2rem;
+        height: 2rem;
+        padding: 0.15rem;
+        border-radius: 10rem;
+      }
+    }
+  }
+
+  & .submitButtonRoot {
+    height: 2.5rem;
+    border-radius: 10rem;
+
+    & .submitButtonLabel {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    & .submitIcon {
+      width: 1.2rem;
+      height: 1.2rem;
+
+      &.loadingSpinner {
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+}

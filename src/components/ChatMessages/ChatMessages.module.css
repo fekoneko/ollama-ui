@@ -1,0 +1,16 @@
+.messagesWrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--mantine-color-dark-4);
+  overflow-y: scroll;
+
+  & .messagesContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}

@@ -1,4 +1,4 @@
-import { PromptModePage } from '@/pages/PromptModePage';
+import { ChatPage } from '@/pages/ChatPage';
 import { FC } from 'react';
 import { AppShell, Title } from '@mantine/core';
 import styles from './App.module.css';
@@ -11,7 +11,7 @@ export const App: FC = () => {
       </AppShell.Header>
 
       <AppShell.Main className={styles.main}>
-        <PromptModePage />
+        <ChatPage />
       </AppShell.Main>
     </AppShell>
   );
