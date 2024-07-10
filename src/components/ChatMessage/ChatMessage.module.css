@@ -54,7 +54,7 @@
 
     &.assistant::after {
       bottom: -0.2rem;
-      right: 0.6rem;
+      right: -0.6rem;
     }
   }
 }
