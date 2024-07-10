@@ -19,7 +19,7 @@ export const ChatPage: FC = () => {
     messages,
     lastMessage,
     addMessage,
-    appendToLastMessage,
+    appendLastMessageContent,
     updateLastMessageStatus,
     clearMessages,
   } = useChat();
@@ -47,7 +47,7 @@ export const ChatPage: FC = () => {
 
       try {
         for await (const chunk of stream) {
-          appendToLastMessage(chunk.message.content);
+          appendLastMessageContent(chunk.message.content);
         }
         updateLastMessageStatus('success');
       } catch (error: any) {

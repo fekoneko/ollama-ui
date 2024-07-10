@@ -21,7 +21,7 @@ export const useChat = () => {
     [setMessages],
   );
 
-  const appendToLastMessage = useCallback(
+  const appendLastMessageContent = useCallback(
     (appendedContent: string) =>
       updateLastMessage((prev) => ({ ...prev, content: prev.content + appendedContent })),
     [updateLastMessage],
@@ -44,6 +44,7 @@ export const useChat = () => {
       );
 
     addEventListener('beforeunload', setErrorOnPendingMessages);
+
     return () => removeEventListener('beforeunload', setErrorOnPendingMessages);
   }, [setMessages]);
 
@@ -52,8 +53,8 @@ export const useChat = () => {
     lastMessage,
     addMessage,
     updateLastMessage,
-    appendToLastMessage,
+    appendLastMessageContent,
     updateLastMessageStatus,
-    clearMessages: clearMessages,
+    clearMessages,
   };
 };
