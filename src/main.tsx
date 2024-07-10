@@ -6,7 +6,7 @@ import { MantineProvider } from '@mantine/core';
 import './index.css';
 import '@mantine/core/styles.css';
 import '@mantine/code-highlight/styles.css';
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const queryClient = new QueryClient();
 
@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <MantineProvider defaultColorScheme="dark">
         <App />
       </MantineProvider>
-      {/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" /> */}
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
     </QueryClientProvider>
   </StrictMode>,
 );
