@@ -1,14 +1,22 @@
 import { ActionIcon } from '@mantine/core';
-import { IconSparkles, IconTrash } from '@tabler/icons-react';
-import { FC } from 'react';
+import { IconTrash } from '@tabler/icons-react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import styles from './ChatHeader.module.css';
+import { ModelSelector } from '@/components/ModelSelector';
 
 export interface ChatHeaderProps {
-  model: string;
+  model: string | undefined;
+  setModel: Dispatch<SetStateAction<string | undefined>>;
   onClear: () => void;
+  modelSelectionDisabled?: boolean;
 }
 
-export const ChatHeader: FC<ChatHeaderProps> = ({ model, onClear }) => (
+export const ChatHeader: FC<ChatHeaderProps> = ({
+  model,
+  setModel,
+  onClear,
+  modelSelectionDisabled,
+}) => (
   <header className={styles.chatHeader}>
     <div className={styles.leftSection}>
       <h1 role="banner" className={styles.siteTitle}>
@@ -17,12 +25,11 @@ export const ChatHeader: FC<ChatHeaderProps> = ({ model, onClear }) => (
 
       <p className={styles.separator}>/</p>
 
-      <div className={styles.modelNameContainer}>
-        <i className={styles.sparkles}>
-          <IconSparkles />
-        </i>
-        <h2 className={styles.modelName}>{model}</h2>
-      </div>
+      <ModelSelector
+        model={model}
+        setModel={setModel}
+        modelSelectionDisabled={modelSelectionDisabled}
+      />
     </div>
 
     <ActionIcon

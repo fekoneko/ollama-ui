@@ -1,9 +1,17 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Message, MessageStatus } from '@/types/chat';
 import { useLocalStorage, useWindowEvent } from '@mantine/hooks';
 
-export const useChat = () => {
-  const [messages, setMessages] = useLocalStorage<Message[]>({ key: 'messages', defaultValue: [] });
+export const useChat = (model: string | undefined) => {
+  const [messages, setMessages] = useLocalStorage<Message[]>({
+    key: `messages-${model}`,
+    defaultValue: [],
+  });
+
+  useEffect(() => {
+    const newModelMessages = JSON.parse(localStorage.getItem(`messages-${model}`) ?? 'null');
+    setMessages(newModelMessages ?? []);
+  }, [model, setMessages]);
 
   const lastMessage = useMemo(
     () => (messages.length > 0 ? messages[messages.length - 1] : undefined),

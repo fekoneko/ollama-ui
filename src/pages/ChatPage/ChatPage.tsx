@@ -14,7 +14,9 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
-  const [model] = useState('llama3');
+  const [model, setModel] = useState<string>();
+  const replyStreamRef = useRef<Abortable>();
+  const chatMessagesRef = useRef<HTMLDivElement>(null);
   const {
     messages,
     lastMessage,
@@ -22,13 +24,13 @@ export const ChatPage: FC = () => {
     appendLastMessageContent,
     updateLastMessageStatus,
     clearMessages,
-  } = useChat();
-  const replyStreamRef = useRef<Abortable>();
-  const chatMessagesRef = useRef<HTMLDivElement>(null);
+  } = useChat(model);
 
   const { mutate: generateReply } = useMutation({
     mutationKey: ['generate'],
     mutationFn: async (prompt: string) => {
+      if (!model) throw new Error('Model is not selected');
+
       replyStreamRef.current?.abort();
       const newMessage: Message = { role: 'user', content: prompt, status: 'pending' };
       addMessage(newMessage);
@@ -81,7 +83,12 @@ export const ChatPage: FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.pageInner}>
-        <ChatHeader model={model} onClear={clearMessages} />
+        <ChatHeader
+          model={model}
+          setModel={setModel}
+          onClear={clearMessages}
+          modelSelectionDisabled={lastMessage?.status === 'pending'}
+        />
         <ChatMessages ref={chatMessagesRef} messages={messages} />
 
         <ChatBottomBar

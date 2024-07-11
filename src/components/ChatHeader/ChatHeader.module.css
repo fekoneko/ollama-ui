@@ -7,50 +7,27 @@
 
   & .leftSection {
     display: flex;
-    align-items: baseline;
-    gap: 0.4rem;
+    align-items: center;
+    gap: 0.2rem;
 
     & .siteTitle {
       font-size: 1.5rem;
       line-height: 1.5rem;
       font-weight: 700;
       color: var(--mantine-color-dark-1);
-      padding: 0.3rem;
+      padding: 0.4rem 0.6rem;
       margin: 0;
       border-radius: var(--mantine-radius-md);
     }
 
     & .separator {
+      position: relative;
+      top: -0.1rem;
       font-size: 1.5rem;
-      line-height: 1.5rem;
+      line-height: 0;
       font-weight: 700;
       color: var(--mantine-color-dark-3);
       margin: 0;
-    }
-
-    & .modelNameContainer {
-      display: flex;
-      align-items: baseline;
-      border-radius: var(--mantine-radius-md);
-
-      & .modelName {
-        font-size: 1.5rem;
-        line-height: 1.5rem;
-        font-weight: 500;
-        color: var(--mantine-color-dark-1);
-        padding: 0.3rem;
-        margin: 0;
-      }
-
-      & .sparkles {
-        position: relative;
-        top: 0.25rem;
-        line-height: 0;
-
-        & * {
-          color: var(--mantine-color-dark-2);
-        }
-      }
     }
   }
 
@@ -58,6 +35,7 @@
     width: 2rem;
     height: 2rem;
     padding: 0.25rem;
+    border-radius: var(--mantine-radius-md);
 
     & * {
       color: var(--mantine-color-dark-2);
