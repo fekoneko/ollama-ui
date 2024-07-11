@@ -2,7 +2,7 @@ import { ActionIcon } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styles from './ChatHeader.module.css';
-import { ChatModelCombobox } from '@/components/ChatModelCombobox';
+import { ChatModelSpotlight } from '@/components/ChatModelSpotlight';
 
 export interface ChatHeaderProps {
   model: string | undefined;
@@ -25,7 +25,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
 
       <p className={styles.separator}>/</p>
 
-      <ChatModelCombobox model={model} setModel={setModel} disabled={disabledSelectModel} />
+      <ChatModelSpotlight model={model} setModel={setModel} disabled={disabledSelectModel} />
     </div>
 
     <ActionIcon
