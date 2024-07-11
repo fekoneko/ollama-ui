@@ -134,7 +134,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
         highlightQuery
         searchProps={{
           leftSection: <IconSearch size={18} />,
-          placeholder: 'Type to find download a model...',
+          placeholder: 'Type to find or download a model...',
         }}
       />
     </>
