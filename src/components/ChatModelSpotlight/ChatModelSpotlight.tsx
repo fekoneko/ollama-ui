@@ -1,11 +1,25 @@
 import { Button, Skeleton } from '@mantine/core';
-import { useQuery } from '@tanstack/react-query';
-import { Dispatch, FC, SetStateAction, useLayoutEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import ollama from 'ollama';
 import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 import styles from './ChatModelSpotlight.module.css';
 import { spotlight, Spotlight } from '@mantine/spotlight';
 import { useSpotlightActions } from '@/hooks/useSpotlightActions';
+import { Abortable } from '@/types/abortable';
+
+export interface PullProgress {
+  model: string;
+  percent: number;
+}
 
 export interface ChatModelSpotlightProps {
   model: string | undefined;
@@ -13,8 +27,15 @@ export interface ChatModelSpotlightProps {
   disabled?: boolean;
 }
 
-export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setModel, disabled }) => {
+export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
+  model: selectedModel,
+  setModel,
+  disabled,
+}) => {
   const [search, setSearch] = useState('');
+  const [pullProgress, setPullProgress] = useState<PullProgress>();
+  const pullStreamRef = useRef<Abortable>();
+  const queryClient = useQueryClient();
 
   const {
     data: localModels,
@@ -30,12 +51,49 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
   });
 
   useLayoutEffect(() => {
-    if (!localModels?.length || (model && localModels.includes(model))) return;
+    if (!localModels?.length || (selectedModel && localModels.includes(selectedModel))) return;
 
     setModel(localModels[0]);
-  }, [localModels, model, setModel]);
+  }, [localModels, selectedModel, setModel]);
 
-  const actions = useSpotlightActions(localModels, setModel, search);
+  const { mutate: pullModel } = useMutation({
+    mutationKey: ['pull-model', search],
+    mutationFn: async () => {
+      if (pullProgress) throw new Error('Model is already pulling');
+      setPullProgress({ model: search, percent: 0 });
+
+      return await ollama.pull({ model: search, stream: true });
+    },
+
+    onSuccess: async (stream) => {
+      pullStreamRef.current = stream;
+
+      try {
+        for await (const chunk of stream) {
+          const newPercent = Math.round((chunk.completed / chunk.total) * 100);
+          setPullProgress((prev) => ({ ...prev!, percent: isNaN(newPercent) ? 0 : newPercent }));
+        }
+
+        queryClient.invalidateQueries({ queryKey: ['get-local-models'] });
+      } catch (error: any) {
+        if (error?.name !== 'AbortError') throw error;
+      } finally {
+        setPullProgress(undefined);
+      }
+    },
+  });
+
+  const abortModelPull = useCallback(() => pullStreamRef.current?.abort(), []);
+
+  const actions = useSpotlightActions(
+    localModels,
+    search,
+    setModel,
+    spotlight.close,
+    pullModel,
+    abortModelPull,
+    pullProgress,
+  );
 
   if (isLoading) return <Skeleton className={styles.loadingSkeleton} />;
 
@@ -54,7 +112,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
         className={styles.selectModelButton}
         disabled={disabled}
       >
-        <h2 className={styles.modelName}>{model ?? 'Model not selected'}</h2>
+        <h2 className={styles.modelName}>{selectedModel ?? 'Model not selected'}</h2>
         <IconChevronDown size={22} />
       </Button>
 
@@ -62,6 +120,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
         actions={actions}
         nothingFound="Nothing found..."
         onQueryChange={(query) => setSearch(query)}
+        closeOnActionTrigger={false}
         highlightQuery
         searchProps={{
           leftSection: <IconSearch size={18} />,
