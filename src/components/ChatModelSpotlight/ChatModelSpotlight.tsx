@@ -45,7 +45,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
     localModels?.map((model) => ({
       id: model,
       label: model,
-      leftSection: <IconCloudOff />,
+      leftSection: <IconCloudOff className={styles.spotlightIcon} />,
       rightSection: <p className={styles.spotlightRightSection}>Local model</p>,
       onClick: () => setModel(model),
     })) ?? [];
@@ -67,7 +67,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
         nothingFound="Nothing found..."
         highlightQuery
         searchProps={{
-          leftSection: <IconSearch />,
+          leftSection: <IconSearch className={styles.spotlightIcon} />,
           placeholder: 'Search models...',
         }}
       />
