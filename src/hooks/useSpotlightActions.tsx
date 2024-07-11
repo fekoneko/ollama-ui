@@ -39,7 +39,7 @@ export const useSpotlightActions = (
       actions.push({
         id: 'pull-model-progress',
         label: `Downloading model '${pullProgress.model}' (${pullProgress.percent}%)`,
-        description: 'Click to cancel the download...',
+        description: 'Select to cancel the download...',
         leftSection: <LoadingSpinner size={18} />,
         rightSection: <p style={{ fontSize: '0.8rem' }}>Remote model</p>,
         onClick: () => abortModelPull(),

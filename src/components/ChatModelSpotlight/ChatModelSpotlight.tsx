@@ -5,6 +5,7 @@ import {
   FC,
   SetStateAction,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -71,7 +72,10 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
       try {
         for await (const chunk of stream) {
           const newPercent = Math.round((chunk.completed / chunk.total) * 100);
-          setPullProgress((prev) => ({ ...prev!, percent: isNaN(newPercent) ? 0 : newPercent }));
+          setPullProgress((prev) => ({
+            ...prev!,
+            percent: isNaN(newPercent) ? prev!.percent : newPercent,
+          }));
         }
 
         queryClient.invalidateQueries({ queryKey: ['get-local-models'] });
@@ -82,6 +86,11 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
       }
     },
   });
+
+  useEffect(() => {
+    if (pullProgress) window.onbeforeunload = () => 'Are you sure you want to cancel the download?';
+    else window.onbeforeunload = null;
+  }, [pullProgress]);
 
   const abortModelPull = useCallback(() => pullStreamRef.current?.abort(), []);
 
