@@ -1,5 +1,5 @@
-import { PullProgress } from '@/components/ChatModelSpotlight';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { PullProgress } from '@/types/pull-progress';
 import { SpotlightActionData } from '@mantine/spotlight';
 import { IconCloudDownload, IconCloudOff } from '@tabler/icons-react';
 import { useMemo } from 'react';

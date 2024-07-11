@@ -1,4 +1,4 @@
-import { Button, CloseButton, Progress, Skeleton } from '@mantine/core';
+import { Button, Skeleton } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Dispatch,
@@ -16,12 +16,8 @@ import styles from './ChatModelSpotlight.module.css';
 import { spotlight, Spotlight } from '@mantine/spotlight';
 import { useSpotlightActions } from '@/hooks/useSpotlightActions';
 import { Abortable } from '@/types/abortable';
-import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
-
-export interface PullProgress {
-  model: string;
-  percent: number;
-}
+import { ChatModelPullProgress } from '@/components/ChatModelPullProgress';
+import { PullProgress } from '@/types/pull-progress';
 
 export interface ChatModelSpotlightProps {
   model: string | undefined;
@@ -127,16 +123,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
       </Button>
 
       {pullProgress && (
-        <div className={styles.progressContainer}>
-          <div className={styles.progressInner}>
-            <p>
-              <LoadingSpinner size={16} />
-              Downloading '{pullProgress.model}' ({pullProgress.percent}%)
-            </p>
-            <Progress value={pullProgress.percent} />
-          </div>
-          <CloseButton onClick={abortModelPull} />
-        </div>
+        <ChatModelPullProgress pullProgress={pullProgress} abortModelPull={abortModelPull} />
       )}
 
       <Spotlight
