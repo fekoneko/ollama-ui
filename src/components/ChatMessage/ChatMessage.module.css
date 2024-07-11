@@ -27,7 +27,7 @@
     border-bottom-left-radius: 0;
   }
 
-  &.waiting {
+  &.user.pending {
     animation: waiting 2s ease-in-out infinite;
   }
 
@@ -54,7 +54,7 @@
 
     &.assistant::after {
       bottom: -0.2rem;
-      right: 0.6rem;
+      right: -0.6rem;
     }
   }
 }

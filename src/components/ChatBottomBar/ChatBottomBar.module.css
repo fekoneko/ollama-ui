@@ -33,13 +33,9 @@
   }
 
   & .submitButtonRoot {
+    width: 3.5rem;
     height: 2.5rem;
     border-radius: 10rem;
-
-    & .submitButtonLabel {
-      display: flex;
-      gap: 0.4rem;
-    }
 
     & .submitIcon {
       width: 1.2rem;

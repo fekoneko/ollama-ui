@@ -5,7 +5,8 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { ChatBottomBar } from '@/components/ChatBottomBar';
 import { ChatMessages } from '@/components/ChatMessages';
 import { useChat } from '@/hooks/useChat';
-import { MessageStatus } from '@/types/chat';
+import { Message } from '@/types/chat';
+import { ChatHeader } from '@/components/ChatHeader';
 
 interface Abortable {
   abort: () => void;
@@ -13,34 +14,50 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
-  const { messages, lastMessage, addMessage, updateLastMessageContent } = useChat();
+  const [model] = useState('llama3');
+  const {
+    messages,
+    lastMessage,
+    addMessage,
+    appendLastMessageContent,
+    updateLastMessageStatus,
+    clearMessages,
+  } = useChat();
   const replyStreamRef = useRef<Abortable>();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
-  const {
-    mutate: generateReply,
-    isPending,
-    isSuccess,
-  } = useMutation({
+  const { mutate: generateReply } = useMutation({
     mutationKey: ['generate'],
-    mutationFn: async (message: string) => {
+    mutationFn: async (prompt: string) => {
       replyStreamRef.current?.abort();
-      const updatedMessages = addMessage({ role: 'user', content: message });
+      const newMessage: Message = { role: 'user', content: prompt, status: 'pending' };
+      addMessage(newMessage);
 
-      return await ollama.chat({ model: 'llama3', messages: updatedMessages, stream: true });
+      return await ollama.chat({
+        model,
+        messages: [...messages, newMessage],
+        stream: true,
+      });
     },
 
     onSuccess: async (stream) => {
       replyStreamRef.current = stream;
-      addMessage({ role: 'assistant', content: '' });
+      updateLastMessageStatus('success');
+      addMessage({ role: 'assistant', content: '', status: 'pending' });
 
       try {
         for await (const chunk of stream) {
-          updateLastMessageContent((prev) => prev + chunk.message.content);
+          appendLastMessageContent(chunk.message.content);
         }
+        updateLastMessageStatus('success');
       } catch (error: any) {
-        if (error.name !== 'AbortError') throw error;
+        updateLastMessageStatus('error');
+        if (error?.name !== 'AbortError') throw error;
       }
+    },
+
+    onError: () => {
+      updateLastMessageStatus('error');
     },
   });
 
@@ -52,7 +69,7 @@ export const ChatPage: FC = () => {
       top: chatMessages.scrollHeight,
       behavior: 'smooth',
     });
-  }, [lastMessage]);
+  }, [lastMessage?.role]);
 
   const handleSend = () => {
     generateReply(prompt);
@@ -61,24 +78,16 @@ export const ChatPage: FC = () => {
 
   const handleStop = () => replyStreamRef.current?.abort();
 
-  const status: MessageStatus =
-    isPending && lastMessage?.role === 'user'
-      ? 'waiting'
-      : isPending && lastMessage?.role === 'assistant'
-        ? 'streaming'
-        : isSuccess
-          ? 'success'
-          : 'error';
-
   return (
     <div className={styles.page}>
       <div className={styles.pageInner}>
-        <ChatMessages ref={chatMessagesRef} messages={messages} messageStatus={status} />
+        <ChatHeader model={model} onClear={clearMessages} />
+        <ChatMessages ref={chatMessagesRef} messages={messages} />
 
         <ChatBottomBar
           prompt={prompt}
           setPrompt={setPrompt}
-          mode={status === 'waiting' ? 'waiting' : status === 'streaming' ? 'stop' : 'send'}
+          lastMessage={lastMessage}
           onSend={handleSend}
           onStop={handleStop}
         />
