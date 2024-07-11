@@ -56,7 +56,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
 
       <ActionIcon
         type="submit"
-        disabled={isLoading || (prompt.length === 0 && isActionSend) || disabled}
+        disabled={disabled || isLoading || (prompt.length === 0 && isActionSend)}
         classNames={{ root: styles.submitButtonRoot }}
       >
         {isActionSend && <IconSend2 className={styles.submitIcon} title="Send message" />}

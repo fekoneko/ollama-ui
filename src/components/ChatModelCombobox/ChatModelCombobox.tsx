@@ -3,27 +3,23 @@ import { useQuery } from '@tanstack/react-query';
 import { Dispatch, FC, SetStateAction, useLayoutEffect } from 'react';
 import ollama from 'ollama';
 import { IconChevronDown } from '@tabler/icons-react';
-import styles from './ModelSelector.module.css';
+import styles from './ChatModelCombobox.module.css';
 
-export interface ModelSelectorProps {
+export interface ChatModelComboboxProps {
   model: string | undefined;
   setModel: Dispatch<SetStateAction<string | undefined>>;
-  modelSelectionDisabled?: boolean;
+  disabled?: boolean;
 }
 
-export const ModelSelector: FC<ModelSelectorProps> = ({
-  model,
-  setModel,
-  modelSelectionDisabled,
-}) => {
+export const ChatModelCombobox: FC<ChatModelComboboxProps> = ({ model, setModel, disabled }) => {
   const combobox = useCombobox();
 
   const {
-    data: availableModels,
+    data: localModels,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['available-models'],
+    queryKey: ['get-local-models'],
     queryFn: async () => {
       const response = await ollama.list();
       return response.models.map((model) => model.name);
@@ -31,9 +27,9 @@ export const ModelSelector: FC<ModelSelectorProps> = ({
   });
 
   useLayoutEffect(() => {
-    if (!availableModels?.length || (model && availableModels.includes(model))) return;
-    setModel(availableModels[0]);
-  }, [availableModels, model, setModel]);
+    if (!localModels?.length || (model && localModels.includes(model))) return;
+    setModel(localModels[0]);
+  }, [localModels, model, setModel]);
 
   if (isLoading) return <Skeleton className={styles.loadingSkeleton} />;
 
@@ -50,7 +46,7 @@ export const ModelSelector: FC<ModelSelectorProps> = ({
       width={250}
       withArrow
       onOptionSubmit={(selectedModel) => {
-        if (!modelSelectionDisabled) setModel(selectedModel);
+        if (!disabled) setModel(selectedModel);
         combobox.closeDropdown();
       }}
     >
@@ -59,7 +55,7 @@ export const ModelSelector: FC<ModelSelectorProps> = ({
           onClick={() => combobox.toggleDropdown()}
           variant="subtle"
           className={styles.modelSelector}
-          disabled={modelSelectionDisabled}
+          disabled={disabled}
         >
           <h2 className={styles.modelName}>{model ?? 'Model not selected'}</h2>
           <IconChevronDown size={22} />
@@ -68,9 +64,9 @@ export const ModelSelector: FC<ModelSelectorProps> = ({
 
       <Combobox.Dropdown>
         <Combobox.Options>
-          {!availableModels?.length && <Combobox.Empty>No models available</Combobox.Empty>}
+          {!localModels?.length && <Combobox.Empty>No models available</Combobox.Empty>}
 
-          {availableModels?.map((model) => (
+          {localModels?.map((model) => (
             <Combobox.Option key={model} value={model}>
               {model}
             </Combobox.Option>
