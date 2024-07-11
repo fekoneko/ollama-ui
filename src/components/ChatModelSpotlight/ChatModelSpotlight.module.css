@@ -1,0 +1,51 @@
+.selectModelButton {
+  display: flex;
+  align-items: center;
+  padding: 0 0.3rem !important;
+  border-radius: var(--mantine-radius-md) !important;
+
+  &:disabled {
+    background-color: transparent;
+  }
+
+  & .modelName {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    color: var(--mantine-color-dark-1);
+    padding: 0.3rem 0.1rem 0.3rem 0.3rem;
+    margin: 0;
+  }
+
+  & svg {
+    position: relative;
+    top: 0.2rem;
+    line-height: 0;
+    color: var(--mantine-color-dark-2);
+  }
+}
+
+.loadingSkeleton {
+  position: relative;
+  top: 0.1rem;
+  width: 9rem !important;
+  height: 1.2rem !important;
+  margin: 0 0.6rem;
+}
+
+.error {
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  color: var(--mantine-color-red-6);
+  margin: 0 0.6rem;
+}
+
+.spotlightRightSection {
+  font-size: 0.8rem;
+}
+
+.spotlightIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+}

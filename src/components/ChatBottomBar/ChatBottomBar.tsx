@@ -11,6 +11,7 @@ interface ChatBottomBarProps {
   lastMessage?: Message;
   onSend?: () => void;
   onStop?: () => void;
+  disabled?: boolean;
 }
 
 export const ChatBottomBar: FC<ChatBottomBarProps> = ({
@@ -19,6 +20,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
   lastMessage,
   onSend,
   onStop,
+  disabled,
 }) => {
   const isLoading = lastMessage?.role === 'user' && lastMessage?.status === 'pending';
   const isActionStop = lastMessage?.role === 'assistant' && lastMessage?.status === 'pending';
@@ -38,6 +40,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
         autoFocus
         autoComplete="off"
         value={prompt}
+        disabled={disabled}
         onChange={(e) => setPrompt(e.currentTarget.value)}
         rightSection={
           prompt.length > 0 && (
@@ -53,7 +56,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
 
       <ActionIcon
         type="submit"
-        disabled={isLoading || (prompt.length === 0 && isActionSend)}
+        disabled={disabled || isLoading || (prompt.length === 0 && isActionSend)}
         classNames={{ root: styles.submitButtonRoot }}
       >
         {isActionSend && <IconSend2 className={styles.submitIcon} title="Send message" />}
