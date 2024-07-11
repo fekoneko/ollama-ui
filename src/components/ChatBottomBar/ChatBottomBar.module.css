@@ -10,6 +10,7 @@
 .form {
   display: flex;
   gap: 0.5rem;
+  padding: 0.6rem 0;
 
   & .inputRoot {
     flex-grow: 1;

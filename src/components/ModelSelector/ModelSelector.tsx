@@ -31,11 +31,8 @@ export const ModelSelector: FC<ModelSelectorProps> = ({
   });
 
   useLayoutEffect(() => {
-    if (!availableModels?.length) return;
-
-    if (model === undefined || !availableModels.includes(model)) {
-      setModel(availableModels[0]);
-    }
+    if (!availableModels?.length || (model && availableModels.includes(model))) return;
+    setModel(availableModels[0]);
   }, [availableModels, model, setModel]);
 
   if (isLoading) return <Skeleton className={styles.loadingSkeleton} />;

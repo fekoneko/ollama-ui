@@ -7,6 +7,7 @@ import { ChatMessages } from '@/components/ChatMessages';
 import { useChat } from '@/hooks/useChat';
 import { Message } from '@/types/chat';
 import { ChatHeader } from '@/components/ChatHeader';
+import { useLocalStorage } from '@mantine/hooks';
 
 interface Abortable {
   abort: () => void;
@@ -14,7 +15,7 @@ interface Abortable {
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
-  const [model, setModel] = useState<string>();
+  const [model, setModel] = useLocalStorage<string | undefined>({ key: 'model' });
   const replyStreamRef = useRef<Abortable>();
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const {
@@ -97,6 +98,7 @@ export const ChatPage: FC = () => {
           lastMessage={lastMessage}
           onSend={handleSend}
           onStop={handleStop}
+          disabled={model === undefined}
         />
       </div>
     </div>
