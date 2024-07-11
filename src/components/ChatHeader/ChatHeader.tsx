@@ -8,14 +8,14 @@ export interface ChatHeaderProps {
   model: string | undefined;
   setModel: Dispatch<SetStateAction<string | undefined>>;
   onClear: () => void;
-  modelSelectionDisabled?: boolean;
+  disabledSelectModel?: boolean;
 }
 
 export const ChatHeader: FC<ChatHeaderProps> = ({
   model,
   setModel,
   onClear,
-  modelSelectionDisabled,
+  disabledSelectModel,
 }) => (
   <header className={styles.chatHeader}>
     <div className={styles.leftSection}>
@@ -25,7 +25,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
 
       <p className={styles.separator}>/</p>
 
-      <ChatModelCombobox model={model} setModel={setModel} disabled={modelSelectionDisabled} />
+      <ChatModelCombobox model={model} setModel={setModel} disabled={disabledSelectModel} />
     </div>
 
     <ActionIcon

@@ -88,7 +88,7 @@ export const ChatPage: FC = () => {
           model={model}
           setModel={setModel}
           onClear={clearMessages}
-          modelSelectionDisabled={lastMessage?.status === 'pending'}
+          disabledSelectModel={lastMessage?.status === 'pending'}
         />
         <ChatMessages ref={chatMessagesRef} messages={messages} />
 

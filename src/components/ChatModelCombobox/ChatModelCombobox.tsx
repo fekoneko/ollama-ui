@@ -22,12 +22,14 @@ export const ChatModelCombobox: FC<ChatModelComboboxProps> = ({ model, setModel,
     queryKey: ['get-local-models'],
     queryFn: async () => {
       const response = await ollama.list();
+
       return response.models.map((model) => model.name);
     },
   });
 
   useLayoutEffect(() => {
     if (!localModels?.length || (model && localModels.includes(model))) return;
+
     setModel(localModels[0]);
   }, [localModels, model, setModel]);
 
