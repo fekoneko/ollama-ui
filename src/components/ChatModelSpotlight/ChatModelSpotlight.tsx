@@ -7,17 +7,18 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import ollama from 'ollama';
-import { IconChevronDown, IconSearch } from '@tabler/icons-react';
+import { IconChevronDown, IconCloudDownload, IconCloudOff, IconSearch } from '@tabler/icons-react';
 import styles from './ChatModelSpotlight.module.css';
-import { spotlight, Spotlight } from '@mantine/spotlight';
-import { useSpotlightActions } from '@/hooks/useSpotlightActions';
+import { closeSpotlight, spotlight, Spotlight, SpotlightActionData } from '@mantine/spotlight';
 import { Abortable } from '@/types/abortable';
 import { ChatModelPullProgress } from '@/components/ChatPullModelProgress';
 import { PullProgress } from '@/types/pull-progress';
+import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 
 export interface ChatModelSpotlightProps {
   model: string | undefined;
@@ -88,15 +89,39 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
 
   const abortModelPull = useCallback(() => pullStreamRef.current?.abort(), []);
 
-  const actions = useSpotlightActions(
-    localModels,
-    search,
-    setModel,
-    spotlight.close,
-    pullModel,
-    abortModelPull,
-    pullProgress,
-  );
+  const actions = useMemo(() => {
+    const actions: SpotlightActionData[] =
+      localModels?.map((model) => ({
+        id: model,
+        label: model,
+        leftSection: <IconCloudOff size={18} />,
+        rightSection: <p style={{ fontSize: '0.8rem' }}>Local model</p>,
+        onClick: () => {
+          setModel(model);
+          closeSpotlight();
+        },
+      })) ?? [];
+
+    if (!pullProgress && search.length > 0 && !localModels?.includes(search))
+      actions.push({
+        id: 'pull-model',
+        label: `Download model '${search}'`,
+        leftSection: <IconCloudDownload size={18} />,
+        rightSection: <p style={{ fontSize: '0.8rem' }}>Remote model</p>,
+        onClick: () => pullModel(),
+      });
+
+    if (pullProgress)
+      actions.push({
+        id: 'pull-model-progress',
+        label: `Downloading model '${pullProgress.model}' (${pullProgress.percent}%)`,
+        description: 'Select to cancel the download...',
+        leftSection: <LoadingSpinner size={18} />,
+        rightSection: <p style={{ fontSize: '0.8rem' }}>Remote model</p>,
+        onClick: () => abortModelPull(),
+      });
+    return actions;
+  }, [localModels, search, setModel, pullModel, abortModelPull, pullProgress]);
 
   if (isLoading) return <Skeleton className={styles.loadingSkeleton} />;
 
