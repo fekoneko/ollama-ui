@@ -1,9 +1,10 @@
 import { ActionIcon, CloseButton, TextInput } from '@mantine/core';
-import { IconLoader2, IconPlayerStop, IconSend2 } from '@tabler/icons-react';
+import { IconPlayerStop, IconSend2 } from '@tabler/icons-react';
 import { FC } from 'react';
 import styles from './ChatBottomBar.module.css';
 import clsx from 'clsx';
 import { Message } from '@/types/chat';
+import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 
 interface ChatBottomBarProps {
   prompt: string;
@@ -62,10 +63,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
         {isActionSend && <IconSend2 className={styles.submitIcon} title="Send message" />}
         {isActionStop && <IconPlayerStop className={styles.submitIcon} title="Cancel generation" />}
         {isLoading && (
-          <IconLoader2
-            className={clsx(styles.submitIcon, styles.loadingSpinner)}
-            title="Waiting for response..."
-          />
+          <LoadingSpinner className={clsx(styles.submitIcon)} title="Waiting for response..." />
         )}
       </ActionIcon>
     </form>

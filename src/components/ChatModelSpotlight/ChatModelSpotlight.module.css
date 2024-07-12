@@ -40,12 +40,3 @@
   color: var(--mantine-color-red-6);
   margin: 0 0.6rem;
 }
-
-.spotlightRightSection {
-  font-size: 0.8rem;
-}
-
-.spotlightIcon {
-  width: 1.2rem;
-  height: 1.2rem;
-}

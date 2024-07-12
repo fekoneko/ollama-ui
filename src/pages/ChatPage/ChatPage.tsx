@@ -8,10 +8,7 @@ import { useChat } from '@/hooks/useChat';
 import { Message } from '@/types/chat';
 import { ChatHeader } from '@/components/ChatHeader';
 import { useLocalStorage } from '@mantine/hooks';
-
-interface Abortable {
-  abort: () => void;
-}
+import { Abortable } from '@/types/abortable';
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState('');
