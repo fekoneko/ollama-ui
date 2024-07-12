@@ -16,7 +16,7 @@ import styles from './ChatModelSpotlight.module.css';
 import { spotlight, Spotlight } from '@mantine/spotlight';
 import { useSpotlightActions } from '@/hooks/useSpotlightActions';
 import { Abortable } from '@/types/abortable';
-import { ChatModelPullProgress } from '@/components/ChatModelPullProgress';
+import { ChatModelPullProgress } from '@/components/ChatPullModelProgress';
 import { PullProgress } from '@/types/pull-progress';
 
 export interface ChatModelSpotlightProps {
@@ -25,11 +25,7 @@ export interface ChatModelSpotlightProps {
   disabled?: boolean;
 }
 
-export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
-  model: selectedModel,
-  setModel,
-  disabled,
-}) => {
+export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setModel, disabled }) => {
   const [search, setSearch] = useState('');
   const [pullProgress, setPullProgress] = useState<PullProgress>();
   const pullStreamRef = useRef<Abortable>();
@@ -49,10 +45,10 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
   });
 
   useLayoutEffect(() => {
-    if (!localModels?.length || (selectedModel && localModels.includes(selectedModel))) return;
+    if (!localModels?.length || (model && localModels.includes(model))) return;
 
     setModel(localModels[0]);
-  }, [localModels, selectedModel, setModel]);
+  }, [localModels, model, setModel]);
 
   const { mutate: pullModel } = useMutation({
     mutationKey: ['pull-model', search],
@@ -68,10 +64,11 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
 
       try {
         for await (const chunk of stream) {
-          const newPercent = Math.round((chunk.completed / chunk.total) * 100);
+          if (chunk.completed === undefined || chunk.total === undefined) continue;
+
           setPullProgress((prev) => ({
             ...prev!,
-            percent: isNaN(newPercent) ? prev!.percent : newPercent,
+            percent: Math.round((chunk.completed / chunk.total) * 100),
           }));
         }
 
@@ -118,17 +115,18 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
         className={styles.selectModelButton}
         disabled={disabled}
       >
-        <h2 className={styles.modelName}>{selectedModel ?? 'Model not selected'}</h2>
+        <h2 className={styles.modelName}>{model ?? 'Model not selected'}</h2>
         <IconChevronDown size={22} />
       </Button>
 
       {pullProgress && (
-        <ChatModelPullProgress pullProgress={pullProgress} abortModelPull={abortModelPull} />
+        <ChatModelPullProgress pullProgress={pullProgress} onAbort={abortModelPull} />
       )}
 
       <Spotlight
         actions={actions}
         nothingFound="Nothing found..."
+        query={search}
         onQueryChange={(query) => setSearch(query)}
         closeOnActionTrigger={false}
         highlightQuery
