@@ -2,7 +2,7 @@ import { ChatModelSpotlight } from "@/components/ChatModelSpotlight";
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { Dispatch, FC, SetStateAction } from "react";
-import styles from "./ChatHeader.module.css";
+import classes from "./ChatHeader.module.css";
 
 export interface ChatHeaderProps {
   model: string | undefined;
@@ -17,13 +17,13 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
   onClear,
   disabledSelectModel,
 }) => (
-  <header className={styles.chatHeader}>
-    <div className={styles.leftSection}>
-      <h1 role="banner" className={styles.siteTitle}>
+  <header className={classes.chatHeader}>
+    <div className={classes.leftSection}>
+      <h1 role="banner" className={classes.siteTitle}>
         Ollama UI
       </h1>
 
-      <p className={styles.separator}>/</p>
+      <p className={classes.separator}>/</p>
 
       <ChatModelSpotlight
         model={model}
@@ -36,7 +36,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
       onClick={onClear}
       variant="subtle"
       title="Clear chat"
-      className={styles.clearButton}
+      className={classes.clearButton}
     >
       <IconTrash />
     </ActionIcon>

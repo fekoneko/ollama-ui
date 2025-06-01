@@ -17,6 +17,7 @@ body {
   height: 100%;
 }
 
+/* TODO: just use ScrollArea */
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
