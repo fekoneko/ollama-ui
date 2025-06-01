@@ -4,7 +4,7 @@ import { ActionIcon, CloseButton, TextInput } from "@mantine/core";
 import { IconPlayerStop, IconSend2 } from "@tabler/icons-react";
 import clsx from "clsx";
 import { FC } from "react";
-import styles from "./ChatBottomBar.module.css";
+import classes from "./ChatBottomBar.module.css";
 
 interface ChatBottomBarProps {
   prompt: string;
@@ -36,7 +36,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit} className={classes.form}>
       <TextInput
         placeholder="Enter your message..."
         autoFocus
@@ -46,28 +46,30 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
         onChange={(e) => setPrompt(e.currentTarget.value)}
         rightSection={
           prompt.length > 0 && (
-            <CloseButton onClick={() => setPrompt("")} className={styles.clearButton} />
+            <CloseButton onClick={() => setPrompt("")} className={classes.clearButton} />
           )
         }
         classNames={{
-          root: styles.inputRoot,
-          input: styles.input,
-          section: styles.inputRightSection,
+          root: classes.inputRoot,
+          input: classes.input,
+          section: classes.inputRightSection,
         }}
       />
 
       <ActionIcon
         type="submit"
         disabled={disabled || isLoading || (prompt.length === 0 && isActionSend)}
-        classNames={{ root: styles.submitButtonRoot }}
+        classNames={{ root: classes.submitButtonRoot }}
       >
-        {isActionSend && <IconSend2 className={styles.submitIcon} title="Send message" />}
+        {isActionSend && (
+          <IconSend2 className={classes.submitIcon} title="Send message" />
+        )}
         {isActionStop && (
-          <IconPlayerStop className={styles.submitIcon} title="Cancel generation" />
+          <IconPlayerStop className={classes.submitIcon} title="Cancel generation" />
         )}
         {isLoading && (
           <LoadingSpinner
-            className={clsx(styles.submitIcon)}
+            className={clsx(classes.submitIcon)}
             title="Waiting for response..."
           />
         )}

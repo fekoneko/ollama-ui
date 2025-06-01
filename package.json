@@ -1,8 +1,9 @@
 {
   "name": "ollama-ui",
-  "private": true,
+  "description": "GUI wrapper for Ollama API",
   "version": "0.5.0",
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",

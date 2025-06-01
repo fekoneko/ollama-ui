@@ -28,7 +28,7 @@ import {
   useRef,
   useState,
 } from "react";
-import styles from "./ChatModelSpotlight.module.css";
+import classes from "./ChatModelSpotlight.module.css";
 
 export interface ChatModelSpotlightProps {
   model: string | undefined;
@@ -138,11 +138,11 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
     return actions;
   }, [localModels, search, setModel, pullModel, abortModelPull, pullProgress]);
 
-  if (isLoading) return <Skeleton className={styles.loadingSkeleton} />;
+  if (isLoading) return <Skeleton className={classes.loadingSkeleton} />;
 
   if (isError)
     return (
-      <p className={styles.error} aria-invalid="true">
+      <p className={classes.error} aria-invalid="true">
         Failed to load models
       </p>
     );
@@ -152,10 +152,10 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
       <Button
         onClick={spotlight.open}
         variant="subtle"
-        className={styles.selectModelButton}
+        className={classes.selectModelButton}
         disabled={disabled}
       >
-        <h2 className={styles.modelName}>{model ?? "Model not selected"}</h2>
+        <h2 className={classes.modelName}>{model ?? "Model not selected"}</h2>
         <IconChevronDown size={22} />
       </Button>
 

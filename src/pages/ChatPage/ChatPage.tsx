@@ -8,7 +8,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
 import ollama from "ollama/browser";
 import { FC, useEffect, useRef, useState } from "react";
-import styles from "./ChatPage.module.css";
+import classes from "./ChatPage.module.css";
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState("");
@@ -79,8 +79,8 @@ export const ChatPage: FC = () => {
   const handleStop = () => replyStreamRef.current?.abort();
 
   return (
-    <div className={styles.page}>
-      <div className={styles.pageInner}>
+    <div className={classes.page}>
+      <div className={classes.pageInner}>
         <ChatHeader
           model={model}
           setModel={setModel}
