@@ -1,5 +1,22 @@
-import { Button, Skeleton } from '@mantine/core';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ChatModelPullProgress } from "@/components/ChatPullModelProgress";
+import { LoadingSpinner } from "@/components/LoadingSpinner/LoadingSpinner";
+import { Abortable } from "@/types/abortable";
+import { PullProgress } from "@/types/pull-progress";
+import { Button, Skeleton } from "@mantine/core";
+import {
+  closeSpotlight,
+  spotlight,
+  Spotlight,
+  SpotlightActionData,
+} from "@mantine/spotlight";
+import {
+  IconChevronDown,
+  IconCloudDownload,
+  IconCloudOff,
+  IconSearch,
+} from "@tabler/icons-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import ollama from "ollama";
 import {
   Dispatch,
   FC,
@@ -10,15 +27,8 @@ import {
   useMemo,
   useRef,
   useState,
-} from 'react';
-import ollama from 'ollama';
-import { IconChevronDown, IconCloudDownload, IconCloudOff, IconSearch } from '@tabler/icons-react';
-import styles from './ChatModelSpotlight.module.css';
-import { closeSpotlight, spotlight, Spotlight, SpotlightActionData } from '@mantine/spotlight';
-import { Abortable } from '@/types/abortable';
-import { ChatModelPullProgress } from '@/components/ChatPullModelProgress';
-import { PullProgress } from '@/types/pull-progress';
-import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+} from "react";
+import styles from "./ChatModelSpotlight.module.css";
 
 export interface ChatModelSpotlightProps {
   model: string | undefined;
@@ -26,10 +36,14 @@ export interface ChatModelSpotlightProps {
   disabled?: boolean;
 }
 
-export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setModel, disabled }) => {
-  const [search, setSearch] = useState('');
+export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
+  model,
+  setModel,
+  disabled,
+}) => {
+  const [search, setSearch] = useState("");
   const [pullProgress, setPullProgress] = useState<PullProgress>();
-  const pullStreamRef = useRef<Abortable>();
+  const pullStreamRef = useRef<Abortable>(null);
   const queryClient = useQueryClient();
 
   const {
@@ -37,7 +51,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['get-local-models'],
+    queryKey: ["get-local-models"],
     queryFn: async () => {
       const response = await ollama.list();
 
@@ -52,9 +66,9 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
   }, [localModels, model, setModel]);
 
   const { mutate: pullModel } = useMutation({
-    mutationKey: ['pull-model', search],
+    mutationKey: ["pull-model", search],
     mutationFn: async () => {
-      if (pullProgress) throw new Error('Model is already pulling');
+      if (pullProgress) throw new Error("Model is already pulling");
       setPullProgress({ model: search, percent: 0 });
 
       return await ollama.pull({ model: search, stream: true });
@@ -73,9 +87,9 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
           }));
         }
 
-        queryClient.invalidateQueries({ queryKey: ['get-local-models'] });
+        queryClient.invalidateQueries({ queryKey: ["get-local-models"] });
       } catch (error: any) {
-        if (error?.name !== 'AbortError') throw error;
+        if (error?.name !== "AbortError") throw error;
       } finally {
         setPullProgress(undefined);
       }
@@ -83,7 +97,8 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
   });
 
   useEffect(() => {
-    if (pullProgress) window.onbeforeunload = () => 'Are you sure you want to cancel the download?';
+    if (pullProgress)
+      window.onbeforeunload = () => "Are you sure you want to cancel the download?";
     else window.onbeforeunload = null;
   }, [pullProgress]);
 
@@ -95,7 +110,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
         id: model,
         label: model,
         leftSection: <IconCloudOff size={18} />,
-        rightSection: <p style={{ fontSize: '0.8rem' }}>Local model</p>,
+        rightSection: <p style={{ fontSize: "0.8rem" }}>Local model</p>,
         onClick: () => {
           setModel(model);
           closeSpotlight();
@@ -104,20 +119,20 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
 
     if (!pullProgress && search.length > 0 && !localModels?.includes(search))
       actions.push({
-        id: 'pull-model',
+        id: "pull-model",
         label: `Download model '${search}'`,
         leftSection: <IconCloudDownload size={18} />,
-        rightSection: <p style={{ fontSize: '0.8rem' }}>Remote model</p>,
+        rightSection: <p style={{ fontSize: "0.8rem" }}>Remote model</p>,
         onClick: () => pullModel(),
       });
 
     if (pullProgress)
       actions.push({
-        id: 'pull-model-progress',
+        id: "pull-model-progress",
         label: `Downloading model '${pullProgress.model}' (${pullProgress.percent}%)`,
-        description: 'Select to cancel the download...',
+        description: "Select to cancel the download...",
         leftSection: <LoadingSpinner size={18} />,
-        rightSection: <p style={{ fontSize: '0.8rem' }}>Remote model</p>,
+        rightSection: <p style={{ fontSize: "0.8rem" }}>Remote model</p>,
         onClick: () => abortModelPull(),
       });
     return actions;
@@ -140,7 +155,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
         className={styles.selectModelButton}
         disabled={disabled}
       >
-        <h2 className={styles.modelName}>{model ?? 'Model not selected'}</h2>
+        <h2 className={styles.modelName}>{model ?? "Model not selected"}</h2>
         <IconChevronDown size={22} />
       </Button>
 
@@ -157,7 +172,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({ model, setMode
         highlightQuery
         searchProps={{
           leftSection: <IconSearch size={18} />,
-          placeholder: 'Type to find or download a model...',
+          placeholder: "Type to find or download a model...",
         }}
       />
     </>

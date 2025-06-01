@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import { Message, MessageStatus } from '@/types/chat';
-import { readLocalStorageValue, useLocalStorage, useWindowEvent } from '@mantine/hooks';
+import { Message, MessageStatus } from "@/types/message";
+import { readLocalStorageValue, useLocalStorage, useWindowEvent } from "@mantine/hooks";
+import { useCallback, useEffect, useMemo } from "react";
 
 export const useChat = (model: string | undefined) => {
   const [messages, setMessages] = useLocalStorage<Message[]>({
@@ -39,17 +39,18 @@ export const useChat = (model: string | undefined) => {
   );
 
   const updateLastMessageStatus = useCallback(
-    (newStatus: MessageStatus) => updateLastMessage((prev) => ({ ...prev, status: newStatus })),
+    (newStatus: MessageStatus) =>
+      updateLastMessage((prev) => ({ ...prev, status: newStatus })),
     [updateLastMessage],
   );
 
   const clearMessages = useCallback(() => setMessages([]), [setMessages]);
 
-  useWindowEvent('beforeunload', () =>
+  useWindowEvent("beforeunload", () =>
     setMessages((prev) =>
       prev.map((message) => ({
         ...message,
-        status: message.status === 'pending' ? 'error' : message.status,
+        status: message.status === "pending" ? "error" : message.status,
       })),
     ),
   );

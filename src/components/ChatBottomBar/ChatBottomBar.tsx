@@ -1,10 +1,10 @@
-import { ActionIcon, CloseButton, TextInput } from '@mantine/core';
-import { IconPlayerStop, IconSend2 } from '@tabler/icons-react';
-import { FC } from 'react';
-import styles from './ChatBottomBar.module.css';
-import clsx from 'clsx';
-import { Message } from '@/types/chat';
-import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from "@/components/LoadingSpinner/LoadingSpinner";
+import { Message } from "@/types/message";
+import { ActionIcon, CloseButton, TextInput } from "@mantine/core";
+import { IconPlayerStop, IconSend2 } from "@tabler/icons-react";
+import clsx from "clsx";
+import { FC } from "react";
+import styles from "./ChatBottomBar.module.css";
 
 interface ChatBottomBarProps {
   prompt: string;
@@ -23,8 +23,9 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
   onStop,
   disabled,
 }) => {
-  const isLoading = lastMessage?.role === 'user' && lastMessage?.status === 'pending';
-  const isActionStop = lastMessage?.role === 'assistant' && lastMessage?.status === 'pending';
+  const isLoading = lastMessage?.role === "user" && lastMessage?.status === "pending";
+  const isActionStop =
+    lastMessage?.role === "assistant" && lastMessage?.status === "pending";
   const isActionSend = !isLoading && !isActionStop;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -45,7 +46,7 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
         onChange={(e) => setPrompt(e.currentTarget.value)}
         rightSection={
           prompt.length > 0 && (
-            <CloseButton onClick={() => setPrompt('')} className={styles.clearButton} />
+            <CloseButton onClick={() => setPrompt("")} className={styles.clearButton} />
           )
         }
         classNames={{
@@ -61,9 +62,14 @@ export const ChatBottomBar: FC<ChatBottomBarProps> = ({
         classNames={{ root: styles.submitButtonRoot }}
       >
         {isActionSend && <IconSend2 className={styles.submitIcon} title="Send message" />}
-        {isActionStop && <IconPlayerStop className={styles.submitIcon} title="Cancel generation" />}
+        {isActionStop && (
+          <IconPlayerStop className={styles.submitIcon} title="Cancel generation" />
+        )}
         {isLoading && (
-          <LoadingSpinner className={clsx(styles.submitIcon)} title="Waiting for response..." />
+          <LoadingSpinner
+            className={clsx(styles.submitIcon)}
+            title="Waiting for response..."
+          />
         )}
       </ActionIcon>
     </form>

@@ -34,7 +34,7 @@
   &.error {
     &::after {
       display: block;
-      content: '!';
+      content: "!";
       position: absolute;
       background-color: var(--mantine-color-red-6);
       opacity: 0.9;

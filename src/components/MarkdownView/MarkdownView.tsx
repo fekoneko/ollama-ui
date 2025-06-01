@@ -1,9 +1,17 @@
-import { FC, isValidElement, PropsWithChildren, ReactNode, useEffect, useState } from 'react';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import styles from './MarkdownView.module.css';
-import { CodeHighlight, InlineCodeHighlight } from '@mantine/code-highlight';
-import clsx from 'clsx';
+import { CodeHighlight, InlineCodeHighlight } from "@mantine/code-highlight";
+import clsx from "clsx";
+import {
+  FC,
+  isValidElement,
+  JSX,
+  PropsWithChildren,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import styles from "./MarkdownView.module.css";
 
 interface CodeComponentProps {
   className?: string;
@@ -15,15 +23,15 @@ const CodeBlock = ({ children, className }: CodeComponentProps): JSX.Element | n
 
   return (
     <CodeHighlight
-      code={children.props.children ?? ''}
-      language={className?.replace('language-', '')}
+      code={(children.props as any).children ?? ""} // TODO: wtf
+      language={className?.replace("language-", "")}
       className={styles.codeBlock}
     />
   );
 };
 
 const InlineCode = ({ children }: PropsWithChildren): JSX.Element => (
-  <InlineCodeHighlight code={children?.toString() ?? ''} />
+  <InlineCodeHighlight code={children?.toString() ?? ""} />
 );
 
 interface MarkdownViewProps {
@@ -44,16 +52,19 @@ export const MarkdownView: FC<MarkdownViewProps> = ({ withTyping, children }) =>
   }, [withTyping, children]);
 
   return (
-    <Markdown
-      skipHtml
+    <span
       className={clsx(styles.markdownView, {
         [styles.typing]: withTyping,
         [styles.animateCursor]: animateCursor,
       })}
-      remarkPlugins={[remarkGfm]}
-      components={{ pre: CodeBlock, code: InlineCode }}
     >
-      {children}
-    </Markdown>
+      <Markdown
+        skipHtml
+        remarkPlugins={[remarkGfm]}
+        components={{ pre: CodeBlock, code: InlineCode }}
+      >
+        {children}
+      </Markdown>
+    </span>
   );
 };
