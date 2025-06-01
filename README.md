@@ -1,3 +1,5 @@
 # Ollama UI
 
-UI wrapper for Ollama API
+GUI wrapper for Ollama API
+
+> This project is for my university
