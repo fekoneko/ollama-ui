@@ -1,0 +1,5 @@
+.root {
+  & [data-selected="true"] {
+    background-color: var(--mantine-color-dark-4);
+  }
+}

@@ -4,25 +4,29 @@ import { ChatHeader } from "@/features/chat/ui/ChatHeader";
 import { ChatMessages } from "@/features/chat/ui/ChatMessages";
 import { ChatPrompt } from "@/features/chat/ui/ChatPrompt";
 import { Abortable } from "@/types/abortable";
-import { useLocalStorage } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
 import ollama from "ollama/browser";
 import { FC, useEffect, useRef, useState } from "react";
 import classes from "./Chat.module.css";
 
-export const ChatPage: FC = () => {
+export interface ChatProps {
+  chatId: string;
+}
+
+export const Chat: FC<ChatProps> = ({ chatId }) => {
   const [prompt, setPrompt] = useState("");
-  const [model, setModel] = useLocalStorage<string | undefined>({ key: "model" });
   const replyStreamRef = useRef<Abortable>(null);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const {
+    model,
     messages,
     lastMessage,
     addMessage,
     appendLastMessageContent,
     updateLastMessageStatus,
     clearMessages,
-  } = useChat(model);
+    setModel,
+  } = useChat(chatId);
 
   const { mutate: generateReply } = useMutation({
     mutationKey: ["generate"],

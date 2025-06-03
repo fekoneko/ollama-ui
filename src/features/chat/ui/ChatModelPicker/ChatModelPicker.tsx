@@ -18,9 +18,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ollama from "ollama";
 import {
-  Dispatch,
   FC,
-  SetStateAction,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -31,8 +29,8 @@ import {
 import classes from "./ChatModelPicker.module.css";
 
 export interface ChatModelPickerProps {
-  model: string | undefined;
-  setModel: Dispatch<SetStateAction<string | undefined>>;
+  model: string | null;
+  setModel: (model: string) => void;
   disabled?: boolean;
 }
 

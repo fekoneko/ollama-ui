@@ -1,12 +1,12 @@
 import { ChatModelPicker } from "@/features/chat/ui/ChatModelPicker";
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import classes from "./ChatHeader.module.css";
 
 export interface ChatHeaderProps {
-  model: string | undefined;
-  setModel: Dispatch<SetStateAction<string | undefined>>;
+  model: string | null;
+  setModel: (model: string) => void;
   onClear: () => void;
   disabledSelectModel?: boolean;
 }
