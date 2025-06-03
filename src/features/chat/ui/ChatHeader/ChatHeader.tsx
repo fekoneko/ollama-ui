@@ -1,4 +1,4 @@
-import { ChatModelSpotlight } from "@/features/chat/ui/ChatModelSpotlight";
+import { ChatModelPicker } from "@/features/chat/ui/ChatModelPicker";
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { Dispatch, FC, SetStateAction } from "react";
@@ -25,11 +25,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
 
       <p className={classes.separator}>/</p>
 
-      <ChatModelSpotlight
-        model={model}
-        setModel={setModel}
-        disabled={disabledSelectModel}
-      />
+      <ChatModelPicker model={model} setModel={setModel} disabled={disabledSelectModel} />
     </div>
 
     <ActionIcon

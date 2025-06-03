@@ -1,5 +1,5 @@
 import { PullProgress } from "@/features/chat/types/pull-progress";
-import { ChatModelPullProgress } from "@/features/chat/ui/ChatPullModelProgress";
+import { ChatPullProgress } from "@/features/chat/ui/ChatPullProgress";
 import { Abortable } from "@/types/abortable";
 import { LoadingSpinner } from "@/ui/LoadingSpinner/LoadingSpinner";
 import { Button, Skeleton } from "@mantine/core";
@@ -28,15 +28,15 @@ import {
   useRef,
   useState,
 } from "react";
-import classes from "./ChatModelSpotlight.module.css";
+import classes from "./ChatModelPicker.module.css";
 
-export interface ChatModelSpotlightProps {
+export interface ChatModelPickerProps {
   model: string | undefined;
   setModel: Dispatch<SetStateAction<string | undefined>>;
   disabled?: boolean;
 }
 
-export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
+export const ChatModelPicker: FC<ChatModelPickerProps> = ({
   model,
   setModel,
   disabled,
@@ -160,7 +160,7 @@ export const ChatModelSpotlight: FC<ChatModelSpotlightProps> = ({
       </Button>
 
       {pullProgress && (
-        <ChatModelPullProgress pullProgress={pullProgress} onAbort={abortModelPull} />
+        <ChatPullProgress pullProgress={pullProgress} onAbort={abortModelPull} />
       )}
 
       <Spotlight

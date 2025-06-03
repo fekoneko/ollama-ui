@@ -2,14 +2,14 @@ import { PullProgress } from "@/features/chat/types/pull-progress";
 import { LoadingSpinner } from "@/ui/LoadingSpinner/LoadingSpinner";
 import { CloseButton, Progress } from "@mantine/core";
 import { FC } from "react";
-import classes from "./ChatPullModelProgress.module.css";
+import classes from "./ChatPullProgress.module.css";
 
-export interface ChatPullModelProgressProps {
+export interface ChatPullProgressProps {
   pullProgress: PullProgress;
   onAbort: () => void;
 }
 
-export const ChatModelPullProgress: FC<ChatPullModelProgressProps> = ({
+export const ChatPullProgress: FC<ChatPullProgressProps> = ({
   pullProgress,
   onAbort,
 }) => (

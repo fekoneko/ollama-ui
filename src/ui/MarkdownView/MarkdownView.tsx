@@ -15,7 +15,7 @@ const CodeBlock = ({ children, className }: CodeComponentProps): JSX.Element | n
 
   return (
     <CodeHighlight
-      code={(children.props as any).children ?? ""} // TODO: wtf
+      code={(children?.props as any)?.children?.toString() ?? ""}
       language={className?.replace("language-", "")}
       className={classes.codeBlock}
     />

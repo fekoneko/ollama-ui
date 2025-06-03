@@ -4,9 +4,9 @@ import { ActionIcon, CloseButton, TextInput } from "@mantine/core";
 import { IconPlayerStop, IconSend2 } from "@tabler/icons-react";
 import clsx from "clsx";
 import { FC } from "react";
-import classes from "./ChatBottomBar.module.css";
+import classes from "./ChatPrompt.module.css";
 
-interface ChatBottomBarProps {
+interface ChatPromptProps {
   prompt: string;
   setPrompt: (message: string) => void;
   lastMessage?: Message;
@@ -15,7 +15,7 @@ interface ChatBottomBarProps {
   disabled?: boolean;
 }
 
-export const ChatBottomBar: FC<ChatBottomBarProps> = ({
+export const ChatPrompt: FC<ChatPromptProps> = ({
   prompt,
   setPrompt,
   lastMessage,

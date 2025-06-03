@@ -1,8 +1,8 @@
 import { useChat } from "@/features/chat/hooks/use-chat";
 import { Message } from "@/features/chat/types/message";
-import { ChatBottomBar } from "@/features/chat/ui/ChatBottomBar";
 import { ChatHeader } from "@/features/chat/ui/ChatHeader";
 import { ChatMessages } from "@/features/chat/ui/ChatMessages";
+import { ChatPrompt } from "@/features/chat/ui/ChatPrompt";
 import { Abortable } from "@/types/abortable";
 import { useLocalStorage } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
@@ -89,7 +89,7 @@ export const ChatPage: FC = () => {
         />
         <ChatMessages ref={chatMessagesRef} messages={messages} />
 
-        <ChatBottomBar
+        <ChatPrompt
           prompt={prompt}
           setPrompt={setPrompt}
           lastMessage={lastMessage}
