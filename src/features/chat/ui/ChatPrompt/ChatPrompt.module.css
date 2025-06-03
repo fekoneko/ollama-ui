@@ -1,0 +1,37 @@
+.form {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.6rem 0;
+
+  .inputRoot {
+    flex-grow: 1;
+
+    .input {
+      height: 2.5rem;
+      padding: 0 1.2rem;
+      border-radius: 10rem;
+    }
+
+    .inputRightSection {
+      width: 2.5rem;
+
+      .clearButton {
+        width: 2rem;
+        height: 2rem;
+        padding: 0.15rem;
+        border-radius: 10rem;
+      }
+    }
+  }
+
+  .submitButtonRoot {
+    width: 3.5rem;
+    height: 2.5rem;
+    border-radius: 10rem;
+
+    .submitIcon {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+}
