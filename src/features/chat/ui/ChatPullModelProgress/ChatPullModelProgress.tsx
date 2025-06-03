@@ -1,5 +1,5 @@
-import { LoadingSpinner } from "@/components/LoadingSpinner/LoadingSpinner";
-import { PullProgress } from "@/types/pull-progress";
+import { PullProgress } from "@/features/chat/types/pull-progress";
+import { LoadingSpinner } from "@/ui/LoadingSpinner/LoadingSpinner";
 import { CloseButton, Progress } from "@mantine/core";
 import { FC } from "react";
 import classes from "./ChatPullModelProgress.module.css";

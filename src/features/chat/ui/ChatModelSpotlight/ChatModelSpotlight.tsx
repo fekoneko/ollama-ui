@@ -1,7 +1,7 @@
-import { ChatModelPullProgress } from "@/components/ChatPullModelProgress";
-import { LoadingSpinner } from "@/components/LoadingSpinner/LoadingSpinner";
+import { PullProgress } from "@/features/chat/types/pull-progress";
+import { ChatModelPullProgress } from "@/features/chat/ui/ChatPullModelProgress";
 import { Abortable } from "@/types/abortable";
-import { PullProgress } from "@/types/pull-progress";
+import { LoadingSpinner } from "@/ui/LoadingSpinner/LoadingSpinner";
 import { Button, Skeleton } from "@mantine/core";
 import {
   closeSpotlight,

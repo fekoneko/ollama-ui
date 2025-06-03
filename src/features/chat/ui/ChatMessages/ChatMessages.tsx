@@ -1,5 +1,5 @@
-import { ChatMessage } from "@/components/ChatMessage/ChatMessage";
-import { Message } from "@/types/message";
+import { Message } from "@/features/chat/types/message";
+import { ChatMessage } from "@/features/chat/ui/ChatMessage/ChatMessage";
 import { forwardRef } from "react";
 import classes from "./ChatMessages.module.css";
 

@@ -1,4 +1,4 @@
-import { ChatModelSpotlight } from "@/components/ChatModelSpotlight";
+import { ChatModelSpotlight } from "@/features/chat/ui/ChatModelSpotlight";
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { Dispatch, FC, SetStateAction } from "react";

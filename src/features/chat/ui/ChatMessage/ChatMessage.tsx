@@ -1,5 +1,5 @@
-import { MarkdownView } from "@/components/MarkdownView";
-import { Message } from "@/types/message";
+import { Message } from "@/features/chat/types/message";
+import { MarkdownView } from "@/ui/MarkdownView";
 import clsx from "clsx";
 import { FC } from "react";
 import classes from "./ChatMessage.module.css";

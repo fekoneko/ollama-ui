@@ -1,5 +1,5 @@
-import { LoadingSpinner } from "@/components/LoadingSpinner/LoadingSpinner";
-import { Message } from "@/types/message";
+import { Message } from "@/features/chat/types/message";
+import { LoadingSpinner } from "@/ui/LoadingSpinner/LoadingSpinner";
 import { ActionIcon, CloseButton, TextInput } from "@mantine/core";
 import { IconPlayerStop, IconSend2 } from "@tabler/icons-react";
 import clsx from "clsx";

@@ -1,14 +1,14 @@
-import { ChatBottomBar } from "@/components/ChatBottomBar";
-import { ChatHeader } from "@/components/ChatHeader";
-import { ChatMessages } from "@/components/ChatMessages";
-import { useChat } from "@/hooks/use-chat";
+import { useChat } from "@/features/chat/hooks/use-chat";
+import { Message } from "@/features/chat/types/message";
+import { ChatBottomBar } from "@/features/chat/ui/ChatBottomBar";
+import { ChatHeader } from "@/features/chat/ui/ChatHeader";
+import { ChatMessages } from "@/features/chat/ui/ChatMessages";
 import { Abortable } from "@/types/abortable";
-import { Message } from "@/types/message";
 import { useLocalStorage } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
 import ollama from "ollama/browser";
 import { FC, useEffect, useRef, useState } from "react";
-import classes from "./ChatPage.module.css";
+import classes from "./Chat.module.css";
 
 export const ChatPage: FC = () => {
   const [prompt, setPrompt] = useState("");

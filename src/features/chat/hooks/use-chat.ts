@@ -1,4 +1,4 @@
-import { Message, MessageStatus } from "@/types/message";
+import { Message, MessageStatus } from "@/features/chat/types/message";
 import { readLocalStorageValue, useLocalStorage, useWindowEvent } from "@mantine/hooks";
 import { useCallback, useEffect, useMemo } from "react";
 
