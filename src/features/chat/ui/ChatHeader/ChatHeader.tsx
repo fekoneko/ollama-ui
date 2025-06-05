@@ -5,13 +5,17 @@ import { IconTrash } from "@tabler/icons-react";
 import { FC } from "react";
 import classes from "./ChatHeader.module.css";
 
-export const ChatHeader: FC = () => {
-  const { clearMessages, lastMessage } = useChat();
+export interface ChatHeaderProps {
+  chatId: string;
+}
+
+export const ChatHeader: FC<ChatHeaderProps> = ({ chatId }) => {
+  const { clearMessages, lastMessage } = useChat(chatId);
 
   return (
     <header className={classes.chatHeader}>
       <div className={classes.leftSection}>
-        <ChatModelPicker disabled={lastMessage?.status === "pending"} />
+        <ChatModelPicker chatId={chatId} disabled={lastMessage?.status === "pending"} />
       </div>
 
       <ActionIcon

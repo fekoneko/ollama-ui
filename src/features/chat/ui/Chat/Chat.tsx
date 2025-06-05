@@ -9,7 +9,11 @@ import ollama from "ollama/browser";
 import { FC, useEffect, useRef, useState } from "react";
 import classes from "./Chat.module.css";
 
-export const Chat: FC = () => {
+export interface ChatProps {
+  chatId: string;
+}
+
+export const Chat: FC<ChatProps> = ({ chatId }) => {
   const [prompt, setPrompt] = useState("");
   const replyStreamRef = useRef<Abortable>(null);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
@@ -21,7 +25,7 @@ export const Chat: FC = () => {
     appendLastMessageContent,
     updateLastMessageStatus,
     isChatSelected,
-  } = useChat();
+  } = useChat(chatId);
 
   const { mutate: generateReply } = useMutation({
     mutationKey: ["generate"],
@@ -83,11 +87,11 @@ export const Chat: FC = () => {
 
   return (
     <div className={classes.wrapper}>
-      <ChatHeader />
+      <ChatHeader chatId={chatId} />
 
       <div className={classes.container}>
         <div className={classes.inner}>
-          <ChatMessages ref={chatMessagesRef} />
+          <ChatMessages ref={chatMessagesRef} chatId={chatId} />
 
           <ChatPrompt
             prompt={prompt}

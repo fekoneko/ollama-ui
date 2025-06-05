@@ -22,11 +22,12 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import classes from "./ChatModelPicker.module.css";
 
 export interface ChatModelPickerProps {
+  chatId: string;
   disabled?: boolean;
 }
 
-export const ChatModelPicker: FC<ChatModelPickerProps> = ({ disabled }) => {
-  const { model, setModel } = useChat();
+export const ChatModelPicker: FC<ChatModelPickerProps> = ({ chatId, disabled }) => {
+  const { model, setModel } = useChat(chatId);
   const [search, setSearch] = useState("");
   const [pullProgress, setPullProgress] = useState<PullProgress>();
   const pullStreamRef = useRef<Abortable>(null);
