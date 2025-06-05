@@ -20,7 +20,6 @@ export const ChatListItem: FC<ChatListItemProps> = ({
 }) => (
   <Button
     variant="subtle"
-    color="gray"
     rightSection={
       <ActionIcon
         component="span"
@@ -33,9 +32,9 @@ export const ChatListItem: FC<ChatListItemProps> = ({
       </ActionIcon>
     }
     onClick={onSelect}
-    classNames={{ root: classes.root, section: classes.section }}
+    classNames={{ root: classes.root, inner: classes.inner, section: classes.section }}
     data-selected={isSelected}
   >
-    {chat.model} ({chat.id})
+    {chat.model ?? "New Chat"}
   </Button>
 );

@@ -1,21 +1,12 @@
 import { ChatData } from "@/features/chat/types/chat-data";
-import { readLocalStorageValue, useLocalStorage } from "@mantine/hooks";
-import { useCallback, useEffect } from "react";
+import { MessengerContext } from "@/features/messenger/providers/MessengerProvider";
+import { use, useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
-export const useChatList = () => {
-  const [chats, setChats] = useLocalStorage<ChatData[]>({
-    key: `chats`,
-    defaultValue: [],
-  });
-
-  useEffect(() => {
-    const chats = readLocalStorageValue<ChatData[]>({
-      key: `chats`,
-      defaultValue: [],
-    });
-    setChats(chats);
-  }, [setChats]);
+export const useChats = () => {
+  const context = use(MessengerContext);
+  if (!context) throw new Error("useChats must be used within ChatsContext");
+  const { chats, setChats, selectedChatId, selectChat } = context;
 
   const updateChat = useCallback(
     (chatId: string, setter: (prev: ChatData) => ChatData) =>
@@ -38,5 +29,5 @@ export const useChatList = () => {
     [setChats],
   );
 
-  return { chats, updateChat, createChat, removeChat };
+  return { chats, updateChat, createChat, removeChat, selectedChatId, selectChat };
 };

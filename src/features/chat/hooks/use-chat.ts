@@ -1,31 +1,38 @@
 import { Message, MessageStatus } from "@/features/chat/types/message";
-import { useChatList } from "@/features/messenger/hooks/use-chat-list";
+import { useChats } from "@/features/messenger/hooks/use-chats";
 import { useWindowEvent } from "@mantine/hooks";
 import { useCallback } from "react";
 
-export const useChat = (chatId: string) => {
-  const { chats, updateChat } = useChatList();
+export const useChat = () => {
+  const { chats, updateChat, selectedChatId } = useChats();
 
-  const chat = chats.find((chat) => chat.id === chatId);
-  const { model, messages } = chat ?? { model: null, messages: [] };
-  const lastMessage = messages.length > 0 ? messages[messages.length - 1] : undefined;
+  const chat = chats.find((chat) => chat.id === selectedChatId);
+  const { model, messages } = chat ?? { model: null, messages: [] as Message[] };
+  const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 
   const addMessage = useCallback(
-    (message: Message) =>
-      updateChat(chatId, (prev) => ({ ...prev, messages: [...prev.messages, message] })),
-    [chatId, updateChat],
+    (message: Message) => {
+      if (!selectedChatId) return;
+      updateChat(selectedChatId, (prev) => ({
+        ...prev,
+        messages: [...prev.messages, message],
+      }));
+    },
+    [selectedChatId, updateChat],
   );
 
   const updateLastMessage = useCallback(
-    (setter: (prev: Message) => Message) =>
-      updateChat(chatId, (prev) => ({
+    (setter: (prev: Message) => Message) => {
+      if (!selectedChatId) return;
+      updateChat(selectedChatId, (prev) => ({
         ...prev,
         messages: [
           ...prev.messages.slice(0, -1),
           setter(prev.messages[prev.messages.length - 1]),
         ],
-      })),
-    [chatId, updateChat],
+      }));
+    },
+    [selectedChatId, updateChat],
   );
 
   const appendLastMessageContent = useCallback(
@@ -40,25 +47,29 @@ export const useChat = (chatId: string) => {
     [updateLastMessage],
   );
 
-  const clearMessages = useCallback(
-    () => updateChat(chatId, (prev) => ({ ...prev, messages: [] })),
-    [chatId, updateChat],
-  );
+  const clearMessages = useCallback(() => {
+    if (!selectedChatId) return;
+    updateChat(selectedChatId, (prev) => ({ ...prev, messages: [] }));
+  }, [selectedChatId, updateChat]);
 
   const setModel = useCallback(
-    (newModel: string) => updateChat(chatId, (prev) => ({ ...prev, model: newModel })),
-    [chatId, updateChat],
+    (newModel: string) => {
+      if (!selectedChatId) return;
+      updateChat(selectedChatId, (prev) => ({ ...prev, model: newModel }));
+    },
+    [selectedChatId, updateChat],
   );
 
-  useWindowEvent("beforeunload", () =>
-    updateChat(chatId, (prev) => ({
+  useWindowEvent("beforeunload", () => {
+    if (!selectedChatId) return;
+    updateChat(selectedChatId, (prev) => ({
       ...prev,
       messages: prev.messages.map((message) => ({
         ...message,
         status: message.status === "pending" ? "error" : message.status,
       })),
-    })),
-  );
+    }));
+  });
 
   return {
     model,

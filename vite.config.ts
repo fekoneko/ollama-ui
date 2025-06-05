@@ -1,16 +1,12 @@
-import { defineConfig } from "vite";
-import path from "path";
 import react from "@vitejs/plugin-react-swc";
+import path from "path";
+import { defineConfig } from "vite";
 
-const host = process.env.TAURI_DEV_HOST;
+const host = process.env["TAURI_DEV_HOST"];
 
-export default defineConfig(async () => ({
+export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
+  resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
@@ -27,10 +23,10 @@ export default defineConfig(async () => ({
           host,
           port: 1421,
         }
-      : undefined,
+      : false,
     watch: {
       // 3. tell vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
   },
-}));
+});

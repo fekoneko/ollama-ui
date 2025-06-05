@@ -19,12 +19,6 @@ export const ChatHeader: FC<ChatHeaderProps> = ({
 }) => (
   <header className={classes.chatHeader}>
     <div className={classes.leftSection}>
-      <h1 role="banner" className={classes.siteTitle}>
-        Ollama UI
-      </h1>
-
-      <p className={classes.separator}>/</p>
-
       <ChatModelPicker model={model} setModel={setModel} disabled={disabledSelectModel} />
     </div>
 

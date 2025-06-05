@@ -1,4 +1,5 @@
 import { Chat } from "@/features/chat/ui/Chat";
+import { MessengerProvider } from "@/features/messenger/providers/MessengerProvider";
 import { ChatList } from "@/features/messenger/ui/ChatList";
 import { AppShell } from "@mantine/core";
 import { FC, PropsWithChildren, useState } from "react";
@@ -8,14 +9,16 @@ export const Messenger: FC<PropsWithChildren> = () => {
   const [chatId, setChatId] = useState<string | null>(null);
 
   return (
-    <AppShell navbar={{ width: "max(18rem, 20%)", breakpoint: "sm" }}>
-      <AppShell.Navbar className={classes.navbar}>
-        <ChatList chatId={chatId} onSelect={setChatId} />
-      </AppShell.Navbar>
+    <MessengerProvider selectedChatId={chatId} selectChat={setChatId}>
+      <AppShell navbar={{ width: "max(18rem, 20%)", breakpoint: "sm" }}>
+        <AppShell.Navbar className={classes.navbar}>
+          <ChatList />
+        </AppShell.Navbar>
 
-      <AppShell.Main className={classes.main}>
-        {chatId && <Chat chatId={chatId} />}
-      </AppShell.Main>
-    </AppShell>
+        <AppShell.Main className={classes.main}>
+          <Chat />
+        </AppShell.Main>
+      </AppShell>
+    </MessengerProvider>
   );
 };

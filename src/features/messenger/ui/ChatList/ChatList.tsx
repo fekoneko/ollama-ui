@@ -1,43 +1,43 @@
-import { useChatList } from "@/features/messenger/hooks/use-chat-list";
+import { useChats } from "@/features/messenger/hooks/use-chats";
 import { ChatListItem } from "@/features/messenger/ui/ChatListItem";
 import { Button } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import classes from "./ChatList.module.css";
 
-export interface ChatListProps {
-  chatId: string | null;
-  onSelect?: (chatId: string | null) => void;
-}
-
-export const ChatList: FC<ChatListProps> = ({ chatId, onSelect }) => {
-  const { chats, createChat, removeChat } = useChatList();
+export const ChatList: FC = () => {
+  const { chats, createChat, removeChat, selectedChatId, selectChat } = useChats();
 
   const handleCreateChat = () => {
     createChat();
-    onSelect?.(chats[chats.length - 1].id);
+    selectChat(chats[chats.length - 1].id);
   };
 
   const handleRemoveChat = (chatId: string) => {
     removeChat(chatId);
-    if (chatId) onSelect?.(null);
+    if (chatId) selectChat(null);
   };
 
   return (
     <div className={classes.chatList}>
+      <div className={classes.titleContainer}>
+        <h1 role="banner" className={classes.title}>
+          Ollama UI
+        </h1>
+      </div>
+
       {chats.map((chat) => (
         <ChatListItem
           key={chat.id}
           chat={chat}
-          isSelected={chat.id === chatId}
-          onSelect={() => onSelect?.(chat.id)}
+          isSelected={chat.id === selectedChatId}
+          onSelect={() => selectChat(chat.id)}
           onRemove={() => handleRemoveChat(chat.id)}
         />
       ))}
 
       <Button
         variant="subtle"
-        color="gray"
         rightSection={<IconPlus />}
         onClick={handleCreateChat}
         className={classes.createButton}

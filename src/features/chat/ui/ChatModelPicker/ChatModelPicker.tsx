@@ -17,15 +17,7 @@ import {
 } from "@tabler/icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ollama from "ollama";
-import {
-  FC,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import classes from "./ChatModelPicker.module.css";
 
 export interface ChatModelPickerProps {
@@ -56,12 +48,6 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({
       return response.models.map((model) => model.name);
     },
   });
-
-  useLayoutEffect(() => {
-    if (!localModels?.length || (model && localModels.includes(model))) return;
-
-    setModel(localModels[0]);
-  }, [localModels, model, setModel]);
 
   const { mutate: pullModel } = useMutation({
     mutationKey: ["pull-model", search],

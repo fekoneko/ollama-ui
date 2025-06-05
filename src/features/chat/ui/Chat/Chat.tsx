@@ -9,11 +9,7 @@ import ollama from "ollama/browser";
 import { FC, useEffect, useRef, useState } from "react";
 import classes from "./Chat.module.css";
 
-export interface ChatProps {
-  chatId: string;
-}
-
-export const Chat: FC<ChatProps> = ({ chatId }) => {
+export const Chat: FC = () => {
   const [prompt, setPrompt] = useState("");
   const replyStreamRef = useRef<Abortable>(null);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
@@ -26,7 +22,7 @@ export const Chat: FC<ChatProps> = ({ chatId }) => {
     updateLastMessageStatus,
     clearMessages,
     setModel,
-  } = useChat(chatId);
+  } = useChat();
 
   const { mutate: generateReply } = useMutation({
     mutationKey: ["generate"],
@@ -83,25 +79,23 @@ export const Chat: FC<ChatProps> = ({ chatId }) => {
   const handleStop = () => replyStreamRef.current?.abort();
 
   return (
-    <div className={classes.page}>
-      <div className={classes.pageInner}>
-        <ChatHeader
-          model={model}
-          setModel={setModel}
-          onClear={clearMessages}
-          disabledSelectModel={lastMessage?.status === "pending"}
-        />
-        <ChatMessages ref={chatMessagesRef} messages={messages} />
+    <div className={classes.pageInner}>
+      <ChatHeader
+        model={model}
+        setModel={setModel}
+        onClear={clearMessages}
+        disabledSelectModel={lastMessage?.status === "pending"}
+      />
+      <ChatMessages ref={chatMessagesRef} messages={messages} />
 
-        <ChatPrompt
-          prompt={prompt}
-          setPrompt={setPrompt}
-          lastMessage={lastMessage}
-          onSend={handleSend}
-          onStop={handleStop}
-          disabled={model === undefined}
-        />
-      </div>
+      <ChatPrompt
+        prompt={prompt}
+        setPrompt={setPrompt}
+        lastMessage={lastMessage}
+        onSend={handleSend}
+        onStop={handleStop}
+        disabled={model === undefined}
+      />
     </div>
   );
 };

@@ -1,14 +1,6 @@
-.page {
+.pageInner {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 0 2rem;
-
-  .pageInner {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 60rem;
-  }
 }
