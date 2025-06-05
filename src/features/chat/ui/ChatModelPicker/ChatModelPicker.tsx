@@ -132,11 +132,14 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({ disabled }) => {
       <Button
         onClick={spotlight.open}
         variant="subtle"
-        className={classes.selectModelButton}
+        classNames={{
+          root: classes.selectButton,
+          section: classes.selectButtonSection,
+        }}
         disabled={disabled}
+        rightSection={<IconChevronDown size={22} />}
       >
-        <h2 className={classes.modelName}>{model ?? "Model not selected"}</h2>
-        <IconChevronDown size={22} />
+        <h2 className={classes.modelName}>{model ?? "no model selected"}</h2>
       </Button>
 
       {pullProgress && (

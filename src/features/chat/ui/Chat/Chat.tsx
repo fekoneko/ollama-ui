@@ -82,18 +82,23 @@ export const Chat: FC = () => {
   if (!isChatSelected) return null;
 
   return (
-    <div className={classes.pageInner}>
+    <div className={classes.wrapper}>
       <ChatHeader />
-      <ChatMessages ref={chatMessagesRef} />
 
-      <ChatPrompt
-        prompt={prompt}
-        setPrompt={setPrompt}
-        lastMessage={lastMessage}
-        onSend={handleSend}
-        onStop={handleStop}
-        disabled={model === undefined}
-      />
+      <div className={classes.container}>
+        <div className={classes.inner}>
+          <ChatMessages ref={chatMessagesRef} />
+
+          <ChatPrompt
+            prompt={prompt}
+            setPrompt={setPrompt}
+            lastMessage={lastMessage}
+            onSend={handleSend}
+            onStop={handleStop}
+            disabled={model === undefined}
+          />
+        </div>
+      </div>
     </div>
   );
 };

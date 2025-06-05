@@ -2,8 +2,12 @@
   list-style: none;
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   .titleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 3.75rem;
     border-bottom: 1px solid var(--mantine-color-dark-4);
 
@@ -19,6 +23,7 @@
   }
 
   .createButton {
+    height: 2.65rem;
     margin: 0.5rem;
   }
 }

@@ -1,11 +1,14 @@
-- [ ] pack with tauri
-- [ ] display pull progress in megabytes
+# Cool I guess
+
 - [ ] possibly list available models to pull
-- [ ] chats
 - [ ] freaking images in freaking messages
 - [ ] create from modelfile
-- [ ] display info about running models
-- [ ] stop a model
 - [ ] remove a model
 - [ ] `ollama serve` from the interface directly
+
+# Not important
+
+- [ ] display info about running models
+- [ ] display pull progress in megabytes
+- [ ] stop a model
 - [ ] keep in system tray while running (?)

@@ -11,11 +11,11 @@ export const Messenger: FC<PropsWithChildren> = () => {
   return (
     <MessengerProvider selectedChatId={chatId} selectChat={setChatId}>
       <AppShell navbar={{ width: "max(18rem, 20%)", breakpoint: "sm" }}>
-        <AppShell.Navbar className={classes.navbar}>
+        <AppShell.Navbar className={classes.navbar} bg="dark.7">
           <ChatList />
         </AppShell.Navbar>
 
-        <AppShell.Main className={classes.main}>
+        <AppShell.Main className={classes.main} bg="dark.8">
           <Chat />
         </AppShell.Main>
       </AppShell>

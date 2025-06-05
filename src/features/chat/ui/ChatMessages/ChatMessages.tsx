@@ -3,7 +3,6 @@ import { ChatMessage } from "@/features/chat/ui/ChatMessage/ChatMessage";
 import { forwardRef } from "react";
 import classes from "./ChatMessages.module.css";
 
-// TODO: use ScrollArea
 export const ChatMessages = forwardRef<HTMLDivElement>((_, ref) => {
   const { messages } = useChat();
 
