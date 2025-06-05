@@ -12,7 +12,7 @@ export const useChats = () => {
     (chatId: string, setter: (prev: ChatData) => ChatData) =>
       setChats((prev) =>
         prev.map((chat) => {
-          if (chat.id === chatId) return chat;
+          if (chat.id !== chatId) return chat;
           return setter(chat);
         }),
       ),

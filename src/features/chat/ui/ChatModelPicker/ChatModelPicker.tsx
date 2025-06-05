@@ -1,3 +1,4 @@
+import { useChat } from "@/features/chat/hooks/use-chat";
 import { PullProgress } from "@/features/chat/types/pull-progress";
 import { ChatPullProgress } from "@/features/chat/ui/ChatPullProgress";
 import { Abortable } from "@/types/abortable";
@@ -21,16 +22,11 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import classes from "./ChatModelPicker.module.css";
 
 export interface ChatModelPickerProps {
-  model: string | null;
-  setModel: (model: string) => void;
   disabled?: boolean;
 }
 
-export const ChatModelPicker: FC<ChatModelPickerProps> = ({
-  model,
-  setModel,
-  disabled,
-}) => {
+export const ChatModelPicker: FC<ChatModelPickerProps> = ({ disabled }) => {
+  const { model, setModel } = useChat();
   const [search, setSearch] = useState("");
   const [pullProgress, setPullProgress] = useState<PullProgress>();
   const pullStreamRef = useRef<Abortable>(null);

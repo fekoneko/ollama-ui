@@ -20,8 +20,6 @@ export const Chat: FC = () => {
     addMessage,
     appendLastMessageContent,
     updateLastMessageStatus,
-    clearMessages,
-    setModel,
     isChatSelected,
   } = useChat();
 
@@ -46,15 +44,17 @@ export const Chat: FC = () => {
       updateLastMessageStatus("success");
       addMessage({ role: "assistant", content: "", status: "pending" });
 
-      try {
-        for await (const chunk of stream) {
-          appendLastMessageContent(chunk.message.content);
+      setTimeout(async () => {
+        try {
+          for await (const chunk of stream) {
+            appendLastMessageContent(chunk.message.content);
+          }
+          updateLastMessageStatus("success");
+        } catch (error: any) {
+          updateLastMessageStatus("error");
+          if (error?.name !== "AbortError") throw error;
         }
-        updateLastMessageStatus("success");
-      } catch (error: any) {
-        updateLastMessageStatus("error");
-        if (error?.name !== "AbortError") throw error;
-      }
+      }, 100);
     },
 
     onError: () => {
@@ -83,13 +83,8 @@ export const Chat: FC = () => {
 
   return (
     <div className={classes.pageInner}>
-      <ChatHeader
-        model={model}
-        setModel={setModel}
-        onClear={clearMessages}
-        disabledSelectModel={lastMessage?.status === "pending"}
-      />
-      <ChatMessages ref={chatMessagesRef} messages={messages} />
+      <ChatHeader />
+      <ChatMessages ref={chatMessagesRef} />
 
       <ChatPrompt
         prompt={prompt}

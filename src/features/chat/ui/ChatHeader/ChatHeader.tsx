@@ -1,34 +1,27 @@
+import { useChat } from "@/features/chat/hooks/use-chat";
 import { ChatModelPicker } from "@/features/chat/ui/ChatModelPicker";
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { FC } from "react";
 import classes from "./ChatHeader.module.css";
 
-export interface ChatHeaderProps {
-  model: string | null;
-  setModel: (model: string) => void;
-  onClear: () => void;
-  disabledSelectModel?: boolean;
-}
+export const ChatHeader: FC = () => {
+  const { clearMessages, lastMessage } = useChat();
 
-export const ChatHeader: FC<ChatHeaderProps> = ({
-  model,
-  setModel,
-  onClear,
-  disabledSelectModel,
-}) => (
-  <header className={classes.chatHeader}>
-    <div className={classes.leftSection}>
-      <ChatModelPicker model={model} setModel={setModel} disabled={disabledSelectModel} />
-    </div>
+  return (
+    <header className={classes.chatHeader}>
+      <div className={classes.leftSection}>
+        <ChatModelPicker disabled={lastMessage?.status === "pending"} />
+      </div>
 
-    <ActionIcon
-      onClick={onClear}
-      variant="subtle"
-      title="Clear chat"
-      className={classes.clearButton}
-    >
-      <IconTrash />
-    </ActionIcon>
-  </header>
-);
+      <ActionIcon
+        onClick={clearMessages}
+        variant="subtle"
+        title="Clear chat"
+        className={classes.clearButton}
+      >
+        <IconTrash />
+      </ActionIcon>
+    </header>
+  );
+};
