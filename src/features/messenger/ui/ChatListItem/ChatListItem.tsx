@@ -1,6 +1,7 @@
 import { ChatData } from "@/features/chat/types/chat-data";
 import { withStopPropagation } from "@/utils/events";
-import { Button } from "@mantine/core";
+import { ActionIcon, Button } from "@mantine/core";
+import { IconTrash } from "@tabler/icons-react";
 import { FC } from "react";
 import classes from "./ChatListItem.module.css";
 
@@ -18,7 +19,19 @@ export const ChatListItem: FC<ChatListItemProps> = ({
   onRemove,
 }) => (
   <Button
-    rightSection={<span onClick={withStopPropagation(onRemove)}>Remove</span>}
+    variant="subtle"
+    color="gray"
+    rightSection={
+      <ActionIcon
+        component="span"
+        size="sm"
+        variant="subtle"
+        color="gray"
+        onClick={withStopPropagation(onRemove)}
+      >
+        <IconTrash />
+      </ActionIcon>
+    }
     onClick={onSelect}
     classNames={{ root: classes.root, section: classes.section }}
     data-selected={isSelected}

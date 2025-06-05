@@ -1,4 +1,8 @@
 .root {
+  height: 3rem;
+  border-bottom: 1px solid var(--mantine-color-gray-8);
+  border-radius: 0;
+
   & [data-selected="true"] {
     background-color: var(--mantine-color-dark-4);
   }

@@ -1,6 +1,7 @@
 import { useChatList } from "@/features/messenger/hooks/use-chat-list";
 import { ChatListItem } from "@/features/messenger/ui/ChatListItem";
 import { Button } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import classes from "./ChatList.module.css";
 
@@ -12,6 +13,16 @@ export interface ChatListProps {
 export const ChatList: FC<ChatListProps> = ({ chatId, onSelect }) => {
   const { chats, createChat, removeChat } = useChatList();
 
+  const handleCreateChat = () => {
+    createChat();
+    onSelect?.(chats[chats.length - 1].id);
+  };
+
+  const handleRemoveChat = (chatId: string) => {
+    removeChat(chatId);
+    if (chatId) onSelect?.(null);
+  };
+
   return (
     <div className={classes.chatList}>
       {chats.map((chat) => (
@@ -20,14 +31,19 @@ export const ChatList: FC<ChatListProps> = ({ chatId, onSelect }) => {
           chat={chat}
           isSelected={chat.id === chatId}
           onSelect={() => onSelect?.(chat.id)}
-          onRemove={() => {
-            removeChat(chat.id);
-            if (chat.id === chatId) onSelect?.(null);
-          }}
+          onRemove={() => handleRemoveChat(chat.id)}
         />
       ))}
 
-      <Button onClick={createChat}>Create new chat</Button>
+      <Button
+        variant="subtle"
+        color="gray"
+        rightSection={<IconPlus />}
+        onClick={handleCreateChat}
+        className={classes.createButton}
+      >
+        Create chat
+      </Button>
     </div>
   );
 };

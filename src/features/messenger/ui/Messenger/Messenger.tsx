@@ -8,7 +8,7 @@ export const Messenger: FC<PropsWithChildren> = () => {
   const [chatId, setChatId] = useState<string | null>(null);
 
   return (
-    <AppShell navbar={{ width: 250, breakpoint: "sm" }}>
+    <AppShell navbar={{ width: "max(18rem, 20%)", breakpoint: "sm" }}>
       <AppShell.Navbar className={classes.navbar}>
         <ChatList chatId={chatId} onSelect={setChatId} />
       </AppShell.Navbar>
