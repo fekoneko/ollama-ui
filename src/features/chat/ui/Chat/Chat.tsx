@@ -22,6 +22,7 @@ export const Chat: FC = () => {
     updateLastMessageStatus,
     clearMessages,
     setModel,
+    isChatSelected,
   } = useChat();
 
   const { mutate: generateReply } = useMutation({
@@ -77,6 +78,8 @@ export const Chat: FC = () => {
   };
 
   const handleStop = () => replyStreamRef.current?.abort();
+
+  if (!isChatSelected) return null;
 
   return (
     <div className={classes.pageInner}>

@@ -19,10 +19,11 @@ export const useChats = () => {
     [setChats],
   );
 
-  const createChat = useCallback(
-    () => setChats((prev) => [...prev, { id: uuid(), model: null, messages: [] }]),
-    [setChats],
-  );
+  const createChat = useCallback(() => {
+    const newChat = { id: uuid(), model: null, messages: [] };
+    setChats((prev) => [...prev, newChat]);
+    selectChat(newChat.id);
+  }, [setChats, selectChat]);
 
   const removeChat = useCallback(
     (chatId: string) => setChats((prev) => prev.filter((chat) => chat.id !== chatId)),

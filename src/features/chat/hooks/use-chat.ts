@@ -81,5 +81,6 @@ export const useChat = () => {
     updateLastMessageStatus,
     clearMessages,
     setModel,
+    isChatSelected: !!selectedChatId,
   };
 };

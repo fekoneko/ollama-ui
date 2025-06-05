@@ -8,11 +8,6 @@ import classes from "./ChatList.module.css";
 export const ChatList: FC = () => {
   const { chats, createChat, removeChat, selectedChatId, selectChat } = useChats();
 
-  const handleCreateChat = () => {
-    createChat();
-    selectChat(chats[chats.length - 1].id);
-  };
-
   const handleRemoveChat = (chatId: string) => {
     removeChat(chatId);
     if (chatId) selectChat(null);
@@ -39,7 +34,7 @@ export const ChatList: FC = () => {
       <Button
         variant="subtle"
         rightSection={<IconPlus />}
-        onClick={handleCreateChat}
+        onClick={createChat}
         className={classes.createButton}
       >
         Create chat
