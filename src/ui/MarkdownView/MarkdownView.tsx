@@ -1,22 +1,26 @@
+import { SHIKI_LANGUAGES } from "@/shiki-languages";
 import { CodeHighlight, InlineCodeHighlight } from "@mantine/code-highlight";
-import { Loader } from "@mantine/core";
 import { FC, isValidElement, JSX, PropsWithChildren, ReactNode } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import classes from "./MarkdownView.module.css";
 
 interface CodeComponentProps {
-  className?: string;
   children?: ReactNode;
 }
 
-const CodeBlock = ({ children, className }: CodeComponentProps): JSX.Element | null => {
+const CodeBlock = ({ children }: CodeComponentProps): JSX.Element | null => {
   if (!isValidElement(children)) return null;
+
+  const code = (children?.props as any)?.children?.toString() ?? "";
+  let language = (children?.props as any)?.className?.replace("language-", "");
+  if (!SHIKI_LANGUAGES.includes(language)) language = "text";
 
   return (
     <CodeHighlight
-      code={(children?.props as any)?.children?.toString() ?? ""}
-      language={className?.replace("language-", "")}
+      code={code}
+      language={language}
+      radius="md"
       className={classes.codeBlock}
     />
   );
@@ -27,11 +31,10 @@ const InlineCode = ({ children }: PropsWithChildren): JSX.Element => (
 );
 
 interface MarkdownViewProps {
-  withTyping?: boolean;
   children?: string;
 }
 
-export const MarkdownView: FC<MarkdownViewProps> = ({ withTyping, children }) => (
+export const MarkdownView: FC<MarkdownViewProps> = ({ children }) => (
   <span className={classes.markdownView}>
     <Markdown
       skipHtml
@@ -40,7 +43,5 @@ export const MarkdownView: FC<MarkdownViewProps> = ({ withTyping, children }) =>
     >
       {children}
     </Markdown>
-
-    {withTyping && <Loader type="dots" size="sm" color="white" mt={-10} />}
   </span>
 );

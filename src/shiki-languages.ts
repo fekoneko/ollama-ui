@@ -1,0 +1,3 @@
+export const SHIKI_LANGUAGES = [
+  "ada", "angular-html", "angular-ts", "asm", "astro", "c", "cobol", "coffee", "common-lisp", "cpp", "csharp", "css", "csv", "docker", "dotenv", "elixir", "elm", "erlang", "fish", "fsharp", "gleam", "go", "graphql", "groovy", "haskell", "html", "java", "javascript", "jinja", "json", "jsonc", "jsx", "kotlin", "lua", "markdown", "mdx", "objective-c", "objective-cpp", "pascal", "perl", "php", "postcss", "powershell", "python", "r", "razor", "regexp", "ruby", "rust", "sass", "scala", "scss", "sql", "svelte", "swift", "toml", "tsx", "typescript", "vue", "vue-html", "xml", "yaml", "zig"
+];
