@@ -3,6 +3,7 @@ import { ChatModelPicker } from "@/features/chat/ui/ChatModelPicker";
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import classes from "./ChatHeader.module.css";
 
 export interface ChatHeaderProps {
@@ -10,6 +11,7 @@ export interface ChatHeaderProps {
 }
 
 export const ChatHeader: FC<ChatHeaderProps> = ({ chatId }) => {
+  const { t } = useTranslation();
   const { clearMessages, lastMessage } = useChat(chatId);
 
   return (
@@ -21,7 +23,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({ chatId }) => {
       <ActionIcon
         onClick={clearMessages}
         variant="subtle"
-        title="Clear chat"
+        title={t("clear-chat")}
         className={classes.clearButton}
       >
         <IconTrash />

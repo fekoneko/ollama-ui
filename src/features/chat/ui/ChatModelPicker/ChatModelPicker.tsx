@@ -19,6 +19,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ollama from "ollama";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import classes from "./ChatModelPicker.module.css";
 
 export interface ChatModelPickerProps {
@@ -27,6 +28,7 @@ export interface ChatModelPickerProps {
 }
 
 export const ChatModelPicker: FC<ChatModelPickerProps> = ({ chatId, disabled }) => {
+  const { t } = useTranslation();
   const { model, setModel } = useChat(chatId);
   const [search, setSearch] = useState("");
   const [pullProgress, setPullProgress] = useState<PullProgress>();
@@ -78,10 +80,9 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({ chatId, disabled }) 
   });
 
   useEffect(() => {
-    if (pullProgress)
-      window.onbeforeunload = () => "Are you sure you want to cancel the download?";
+    if (pullProgress) window.onbeforeunload = () => t("sure-cancel-download");
     else window.onbeforeunload = null;
-  }, [pullProgress]);
+  }, [pullProgress, t]);
 
   const abortModelPull = useCallback(() => pullStreamRef.current?.abort(), []);
 
@@ -91,7 +92,7 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({ chatId, disabled }) 
         id: model,
         label: model,
         leftSection: <IconCloudOff size={18} />,
-        rightSection: <p style={{ fontSize: "0.8rem" }}>Local model</p>,
+        rightSection: <p style={{ fontSize: "0.8rem" }}>{t("local-model")}</p>,
         onClick: () => {
           setModel(model);
           closeSpotlight();
@@ -101,30 +102,30 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({ chatId, disabled }) 
     if (!pullProgress && search.length > 0 && !localModels?.includes(search))
       actions.push({
         id: "pull-model",
-        label: `Download model '${search}'`,
+        label: `${t("download-model")} '${search}'`,
         leftSection: <IconCloudDownload size={18} />,
-        rightSection: <p style={{ fontSize: "0.8rem" }}>Remote model</p>,
+        rightSection: <p style={{ fontSize: "0.8rem" }}>{t("remote-model")}</p>,
         onClick: () => pullModel(),
       });
 
     if (pullProgress)
       actions.push({
         id: "pull-model-progress",
-        label: `Downloading model '${pullProgress.model}' (${pullProgress.percent}%)`,
-        description: "Select to cancel the download...",
+        label: `${t("downloadng-model")} '${pullProgress.model}' (${pullProgress.percent}%)`,
+        description: t("select-to-cancel-download"),
         leftSection: <LoadingSpinner size={18} />,
-        rightSection: <p style={{ fontSize: "0.8rem" }}>Remote model</p>,
+        rightSection: <p style={{ fontSize: "0.8rem" }}>{t("remote-model")}</p>,
         onClick: () => abortModelPull(),
       });
     return actions;
-  }, [localModels, search, setModel, pullModel, abortModelPull, pullProgress]);
+  }, [localModels, search, setModel, pullModel, abortModelPull, pullProgress, t]);
 
   if (isLoading) return <Skeleton className={classes.loadingSkeleton} />;
 
   if (isError)
     return (
       <p className={classes.error} aria-invalid="true">
-        Failed to load models
+        {t("failed-to-load-models")}
       </p>
     );
 
@@ -140,7 +141,7 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({ chatId, disabled }) 
         disabled={disabled}
         rightSection={<IconChevronDown size={22} />}
       >
-        <h2 className={classes.modelName}>{model ?? "no model selected"}</h2>
+        <h2 className={classes.modelName}>{model ?? t("no-model-selected")}</h2>
       </Button>
 
       {pullProgress && (
@@ -149,14 +150,14 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({ chatId, disabled }) 
 
       <Spotlight
         actions={actions}
-        nothingFound="Nothing found..."
+        nothingFound={t("nothing-found")}
         query={search}
         onQueryChange={(query) => setSearch(query)}
         closeOnActionTrigger={false}
         highlightQuery
         searchProps={{
           leftSection: <IconSearch size={18} />,
-          placeholder: "Type to find or download a model...",
+          placeholder: t("type-to-find-download-model"),
         }}
       />
     </>
