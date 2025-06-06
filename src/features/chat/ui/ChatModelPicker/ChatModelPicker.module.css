@@ -44,3 +44,9 @@
   color: var(--mantine-color-red-6);
   margin: 0 0.6rem;
 }
+
+html[data-mantine-color-scheme="light"] {
+  .modelName {
+    color: var(--mantine-color-gray-7);
+  }
+}
