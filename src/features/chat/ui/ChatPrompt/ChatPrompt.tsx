@@ -9,7 +9,7 @@ import classes from "./ChatPrompt.module.css";
 interface ChatPromptProps {
   prompt: string;
   setPrompt: (message: string) => void;
-  lastMessage?: Message;
+  lastMessage?: Message | null;
   onSend?: () => void;
   onStop?: () => void;
   disabled?: boolean;

@@ -1,35 +1,38 @@
 import { Message, MessageStatus } from "@/features/chat/types/message";
-import { readLocalStorageValue, useLocalStorage, useWindowEvent } from "@mantine/hooks";
-import { useCallback, useEffect, useMemo } from "react";
+import { useChats } from "@/features/messenger/hooks/use-chats";
+import { useWindowEvent } from "@mantine/hooks";
+import { useCallback } from "react";
 
-export const useChat = (model: string | undefined) => {
-  const [messages, setMessages] = useLocalStorage<Message[]>({
-    key: `messages-${model}`,
-    defaultValue: [],
-  });
+export const useChat = (chatId: string) => {
+  const { chats, updateChat, selectedChatId } = useChats();
 
-  useEffect(() => {
-    const newModelMessages = readLocalStorageValue<Message[]>({
-      key: `messages-${model}`,
-      defaultValue: [],
-    });
-    setMessages(newModelMessages);
-  }, [model, setMessages]);
-
-  const lastMessage = useMemo(
-    () => (messages.length > 0 ? messages[messages.length - 1] : undefined),
-    [messages],
-  );
+  const chat = chats.find((chat) => chat.id === chatId);
+  const { model, messages } = chat ?? { model: null, messages: [] as Message[] };
+  const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 
   const addMessage = useCallback(
-    (message: Message) => setMessages((prev) => [...prev, message]),
-    [setMessages],
+    (message: Message) => {
+      if (!chatId) return;
+      updateChat(chatId, (prev) => ({
+        ...prev,
+        messages: [...prev.messages, message],
+      }));
+    },
+    [chatId, updateChat],
   );
 
   const updateLastMessage = useCallback(
-    (setMessage: (prev: Message) => Message) =>
-      setMessages((prev) => [...prev.slice(0, -1), setMessage(prev[prev.length - 1])]),
-    [setMessages],
+    (setter: (prev: Message) => Message) => {
+      if (!chatId) return;
+      updateChat(chatId, (prev) => ({
+        ...prev,
+        messages: [
+          ...prev.messages.slice(0, -1),
+          setter(prev.messages[prev.messages.length - 1]),
+        ],
+      }));
+    },
+    [chatId, updateChat],
   );
 
   const appendLastMessageContent = useCallback(
@@ -44,18 +47,32 @@ export const useChat = (model: string | undefined) => {
     [updateLastMessage],
   );
 
-  const clearMessages = useCallback(() => setMessages([]), [setMessages]);
+  const clearMessages = useCallback(() => {
+    if (!chatId) return;
+    updateChat(chatId, (prev) => ({ ...prev, messages: [] }));
+  }, [chatId, updateChat]);
 
-  useWindowEvent("beforeunload", () =>
-    setMessages((prev) =>
-      prev.map((message) => ({
+  const setModel = useCallback(
+    (newModel: string) => {
+      if (!chatId) return;
+      updateChat(chatId, (prev) => ({ ...prev, model: newModel }));
+    },
+    [chatId, updateChat],
+  );
+
+  useWindowEvent("beforeunload", () => {
+    if (!chatId) return;
+    updateChat(chatId, (prev) => ({
+      ...prev,
+      messages: prev.messages.map((message) => ({
         ...message,
         status: message.status === "pending" ? "error" : message.status,
       })),
-    ),
-  );
+    }));
+  });
 
   return {
+    model,
     messages,
     lastMessage,
     addMessage,
@@ -63,5 +80,7 @@ export const useChat = (model: string | undefined) => {
     appendLastMessageContent,
     updateLastMessageStatus,
     clearMessages,
+    setModel,
+    isChatSelected: selectedChatId === chatId,
   };
 };

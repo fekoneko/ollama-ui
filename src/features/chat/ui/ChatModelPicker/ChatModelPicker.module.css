@@ -1,4 +1,4 @@
-.selectModelButton {
+.selectButton {
   display: flex;
   align-items: center;
   padding: 0 0.3rem !important;
@@ -9,7 +9,7 @@
   }
 
   .modelName {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     line-height: 1.5rem;
     font-weight: 500;
     color: var(--mantine-color-dark-1);
@@ -17,11 +17,15 @@
     margin: 0;
   }
 
-  svg {
-    position: relative;
-    top: 0.2rem;
-    line-height: 0;
-    color: var(--mantine-color-dark-2);
+  .selectButtonSection {
+    margin-left: 0.25rem;
+
+    svg {
+      position: relative;
+      top: 0.1rem;
+      line-height: 0;
+      color: var(--mantine-color-dark-2);
+    }
   }
 }
 

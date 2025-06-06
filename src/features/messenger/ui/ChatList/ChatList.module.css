@@ -1,0 +1,11 @@
+.chatList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .createButton {
+    height: 2.65rem;
+    margin: 0.5rem;
+  }
+}

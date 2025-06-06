@@ -1,7 +1,7 @@
 .form {
   display: flex;
   gap: 0.5rem;
-  padding: 0.6rem 0;
+  padding: 0.6rem 0.6rem 1rem 0.6rem;
 
   .inputRoot {
     flex-grow: 1;

@@ -4,25 +4,28 @@ import { ChatHeader } from "@/features/chat/ui/ChatHeader";
 import { ChatMessages } from "@/features/chat/ui/ChatMessages";
 import { ChatPrompt } from "@/features/chat/ui/ChatPrompt";
 import { Abortable } from "@/types/abortable";
-import { useLocalStorage } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
 import ollama from "ollama/browser";
 import { FC, useEffect, useRef, useState } from "react";
 import classes from "./Chat.module.css";
 
-export const ChatPage: FC = () => {
+export interface ChatProps {
+  chatId: string;
+}
+
+export const Chat: FC<ChatProps> = ({ chatId }) => {
   const [prompt, setPrompt] = useState("");
-  const [model, setModel] = useLocalStorage<string | undefined>({ key: "model" });
   const replyStreamRef = useRef<Abortable>(null);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const {
+    model,
     messages,
     lastMessage,
     addMessage,
     appendLastMessageContent,
     updateLastMessageStatus,
-    clearMessages,
-  } = useChat(model);
+    isChatSelected,
+  } = useChat(chatId);
 
   const { mutate: generateReply } = useMutation({
     mutationKey: ["generate"],
@@ -45,15 +48,17 @@ export const ChatPage: FC = () => {
       updateLastMessageStatus("success");
       addMessage({ role: "assistant", content: "", status: "pending" });
 
-      try {
-        for await (const chunk of stream) {
-          appendLastMessageContent(chunk.message.content);
+      setTimeout(async () => {
+        try {
+          for await (const chunk of stream) {
+            appendLastMessageContent(chunk.message.content);
+          }
+          updateLastMessageStatus("success");
+        } catch (error: any) {
+          updateLastMessageStatus("error");
+          if (error?.name !== "AbortError") throw error;
         }
-        updateLastMessageStatus("success");
-      } catch (error: any) {
-        updateLastMessageStatus("error");
-        if (error?.name !== "AbortError") throw error;
-      }
+      }, 100);
     },
 
     onError: () => {
@@ -78,25 +83,25 @@ export const ChatPage: FC = () => {
 
   const handleStop = () => replyStreamRef.current?.abort();
 
-  return (
-    <div className={classes.page}>
-      <div className={classes.pageInner}>
-        <ChatHeader
-          model={model}
-          setModel={setModel}
-          onClear={clearMessages}
-          disabledSelectModel={lastMessage?.status === "pending"}
-        />
-        <ChatMessages ref={chatMessagesRef} messages={messages} />
+  if (!isChatSelected) return null;
 
-        <ChatPrompt
-          prompt={prompt}
-          setPrompt={setPrompt}
-          lastMessage={lastMessage}
-          onSend={handleSend}
-          onStop={handleStop}
-          disabled={model === undefined}
-        />
+  return (
+    <div className={classes.wrapper}>
+      <ChatHeader chatId={chatId} />
+
+      <div className={classes.container}>
+        <div className={classes.inner}>
+          <ChatMessages ref={chatMessagesRef} chatId={chatId} />
+
+          <ChatPrompt
+            prompt={prompt}
+            setPrompt={setPrompt}
+            lastMessage={lastMessage}
+            onSend={handleSend}
+            onStop={handleStop}
+            disabled={model === undefined}
+          />
+        </div>
       </div>
     </div>
   );

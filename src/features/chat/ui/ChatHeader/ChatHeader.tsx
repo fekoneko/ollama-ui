@@ -1,40 +1,31 @@
+import { useChat } from "@/features/chat/hooks/use-chat";
 import { ChatModelPicker } from "@/features/chat/ui/ChatModelPicker";
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import classes from "./ChatHeader.module.css";
 
 export interface ChatHeaderProps {
-  model: string | undefined;
-  setModel: Dispatch<SetStateAction<string | undefined>>;
-  onClear: () => void;
-  disabledSelectModel?: boolean;
+  chatId: string;
 }
 
-export const ChatHeader: FC<ChatHeaderProps> = ({
-  model,
-  setModel,
-  onClear,
-  disabledSelectModel,
-}) => (
-  <header className={classes.chatHeader}>
-    <div className={classes.leftSection}>
-      <h1 role="banner" className={classes.siteTitle}>
-        Ollama UI
-      </h1>
+export const ChatHeader: FC<ChatHeaderProps> = ({ chatId }) => {
+  const { clearMessages, lastMessage } = useChat(chatId);
 
-      <p className={classes.separator}>/</p>
+  return (
+    <header className={classes.chatHeader}>
+      <div className={classes.leftSection}>
+        <ChatModelPicker chatId={chatId} disabled={lastMessage?.status === "pending"} />
+      </div>
 
-      <ChatModelPicker model={model} setModel={setModel} disabled={disabledSelectModel} />
-    </div>
-
-    <ActionIcon
-      onClick={onClear}
-      variant="subtle"
-      title="Clear chat"
-      className={classes.clearButton}
-    >
-      <IconTrash />
-    </ActionIcon>
-  </header>
-);
+      <ActionIcon
+        onClick={clearMessages}
+        variant="subtle"
+        title="Clear chat"
+        className={classes.clearButton}
+      >
+        <IconTrash />
+      </ActionIcon>
+    </header>
+  );
+};

@@ -1,3 +1,4 @@
+import { useChat } from "@/features/chat/hooks/use-chat";
 import { PullProgress } from "@/features/chat/types/pull-progress";
 import { ChatPullProgress } from "@/features/chat/ui/ChatPullProgress";
 import { Abortable } from "@/types/abortable";
@@ -17,30 +18,16 @@ import {
 } from "@tabler/icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ollama from "ollama";
-import {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import classes from "./ChatModelPicker.module.css";
 
 export interface ChatModelPickerProps {
-  model: string | undefined;
-  setModel: Dispatch<SetStateAction<string | undefined>>;
+  chatId: string;
   disabled?: boolean;
 }
 
-export const ChatModelPicker: FC<ChatModelPickerProps> = ({
-  model,
-  setModel,
-  disabled,
-}) => {
+export const ChatModelPicker: FC<ChatModelPickerProps> = ({ chatId, disabled }) => {
+  const { model, setModel } = useChat(chatId);
   const [search, setSearch] = useState("");
   const [pullProgress, setPullProgress] = useState<PullProgress>();
   const pullStreamRef = useRef<Abortable>(null);
@@ -58,12 +45,6 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({
       return response.models.map((model) => model.name);
     },
   });
-
-  useLayoutEffect(() => {
-    if (!localModels?.length || (model && localModels.includes(model))) return;
-
-    setModel(localModels[0]);
-  }, [localModels, model, setModel]);
 
   const { mutate: pullModel } = useMutation({
     mutationKey: ["pull-model", search],
@@ -152,11 +133,14 @@ export const ChatModelPicker: FC<ChatModelPickerProps> = ({
       <Button
         onClick={spotlight.open}
         variant="subtle"
-        className={classes.selectModelButton}
+        classNames={{
+          root: classes.selectButton,
+          section: classes.selectButtonSection,
+        }}
         disabled={disabled}
+        rightSection={<IconChevronDown size={22} />}
       >
-        <h2 className={classes.modelName}>{model ?? "Model not selected"}</h2>
-        <IconChevronDown size={22} />
+        <h2 className={classes.modelName}>{model ?? "no model selected"}</h2>
       </Button>
 
       {pullProgress && (
