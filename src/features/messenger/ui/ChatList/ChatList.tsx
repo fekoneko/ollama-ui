@@ -3,9 +3,11 @@ import { ChatListItem } from "@/features/messenger/ui/ChatListItem";
 import { Button } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import classes from "./ChatList.module.css";
 
 export const ChatList: FC = () => {
+  const { t } = useTranslation();
   const { chats, createChat, removeChat, selectedChatId, selectChat } = useChats();
 
   const handleRemoveChat = (chatId: string) => {
@@ -31,7 +33,7 @@ export const ChatList: FC = () => {
         onClick={createChat}
         className={classes.createButton}
       >
-        Create chat
+        {t("create-chat")}
       </Button>
     </div>
   );

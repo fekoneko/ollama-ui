@@ -3,6 +3,7 @@ import { withStopPropagation } from "@/utils/events";
 import { ActionIcon, Button } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import classes from "./ChatListItem.module.css";
 
 export interface ChatListItemProps {
@@ -17,24 +18,28 @@ export const ChatListItem: FC<ChatListItemProps> = ({
   isSelected,
   onSelect,
   onRemove,
-}) => (
-  <Button
-    variant="subtle"
-    rightSection={
-      <ActionIcon
-        component="span"
-        size="sm"
-        variant="subtle"
-        color="gray"
-        onClick={withStopPropagation(onRemove)}
-      >
-        <IconTrash />
-      </ActionIcon>
-    }
-    onClick={onSelect}
-    classNames={{ root: classes.root, inner: classes.inner, section: classes.section }}
-    data-selected={isSelected}
-  >
-    {chat.model ?? "New Chat"}
-  </Button>
-);
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Button
+      variant="subtle"
+      rightSection={
+        <ActionIcon
+          component="span"
+          size="sm"
+          variant="subtle"
+          color="gray"
+          onClick={withStopPropagation(onRemove)}
+        >
+          <IconTrash title={t("remove-chat")} />
+        </ActionIcon>
+      }
+      onClick={onSelect}
+      classNames={{ root: classes.root, inner: classes.inner, section: classes.section }}
+      data-selected={isSelected}
+    >
+      {chat.model ?? t("new-chat")}
+    </Button>
+  );
+};

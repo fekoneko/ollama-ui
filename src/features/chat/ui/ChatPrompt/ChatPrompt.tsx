@@ -4,6 +4,7 @@ import { ActionIcon, CloseButton, TextInput } from "@mantine/core";
 import { IconPlayerStop, IconSend2 } from "@tabler/icons-react";
 import clsx from "clsx";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import classes from "./ChatPrompt.module.css";
 
 interface ChatPromptProps {
@@ -23,6 +24,7 @@ export const ChatPrompt: FC<ChatPromptProps> = ({
   onStop,
   disabled,
 }) => {
+  const { t } = useTranslation();
   const isLoading = lastMessage?.role === "user" && lastMessage?.status === "pending";
   const isActionStop =
     lastMessage?.role === "assistant" && lastMessage?.status === "pending";
@@ -38,7 +40,7 @@ export const ChatPrompt: FC<ChatPromptProps> = ({
   return (
     <form onSubmit={handleSubmit} className={classes.form}>
       <TextInput
-        placeholder="Enter your message..."
+        placeholder={t("enter-message")}
         autoFocus
         autoComplete="off"
         value={prompt}
@@ -62,15 +64,15 @@ export const ChatPrompt: FC<ChatPromptProps> = ({
         classNames={{ root: classes.submitButtonRoot }}
       >
         {isActionSend && (
-          <IconSend2 className={classes.submitIcon} title="Send message" />
+          <IconSend2 className={classes.submitIcon} title={t("send-message")} />
         )}
         {isActionStop && (
-          <IconPlayerStop className={classes.submitIcon} title="Cancel generation" />
+          <IconPlayerStop className={classes.submitIcon} title={t("cancel-generation")} />
         )}
         {isLoading && (
           <LoadingSpinner
             className={clsx(classes.submitIcon)}
-            title="Waiting for response..."
+            title={t("waiting-for-response")}
           />
         )}
       </ActionIcon>
