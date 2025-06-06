@@ -18,6 +18,7 @@ export const EN_TRANSLATION = {
   "clear-chat": "Clear chat",
   "remove-chat": "Remove chat",
   "toggle-theme": "Toggle theme",
+  "change-language": "Change language",
 } satisfies Record<string, string>;
 
 export const RU_TRANSLATION = {
@@ -40,6 +41,7 @@ export const RU_TRANSLATION = {
   "clear-chat": "Очистить чат",
   "remove-chat": "Удалить чат",
   "toggle-theme": "Переключить тему",
+  "change-language": "Сменить язык",
 } satisfies typeof EN_TRANSLATION;
 
 export const JA_TRANSLATION = {
@@ -62,4 +64,5 @@ export const JA_TRANSLATION = {
   "clear-chat": "チャットをクリアする",
   "remove-chat": "チャットを削除する",
   "toggle-theme": "テーマを切り替える",
+  "change-language": "言語を変更する",
 } satisfies typeof EN_TRANSLATION;

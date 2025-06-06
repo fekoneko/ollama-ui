@@ -2,7 +2,9 @@ import { EN_TRANSLATION, JA_TRANSLATION, RU_TRANSLATION } from "@/lib/translatio
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 
-i18next.use(initReactI18next).init({
+export const i18n = i18next.createInstance();
+
+i18n.use(initReactI18next).init({
   resources: {
     en: { translation: EN_TRANSLATION },
     ru: { translation: RU_TRANSLATION },
