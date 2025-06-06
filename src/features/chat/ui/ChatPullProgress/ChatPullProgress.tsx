@@ -19,7 +19,7 @@ export const ChatPullProgress: FC<ChatPullProgressProps> = ({
         <LoadingSpinner size={16} />
         Downloading '{pullProgress.model}' ({pullProgress.percent}%)
       </p>
-      <Progress value={pullProgress.percent} />
+      <Progress value={pullProgress.percent} color="gray.6" />
     </div>
     <CloseButton onClick={onAbort} />
   </div>

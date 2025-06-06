@@ -18,12 +18,14 @@
   &.user {
     align-self: flex-end;
     background-color: var(--mantine-color-blue-7);
+    border: 1px solid var(--mantine-color-blue-5);
     border-bottom-right-radius: 0;
   }
 
   &.assistant {
     align-self: flex-start;
-    background-color: var(--mantine-color-dark-5);
+    background-color: var(--mantine-color-dark-6);
+    border: 1px solid var(--mantine-color-dark-5);
     border-bottom-left-radius: 0;
   }
 
@@ -56,5 +58,24 @@
       bottom: -0.2rem;
       right: -0.6rem;
     }
+  }
+}
+
+html[data-mantine-color-scheme="light"] {
+  .messageBox {
+    &.user {
+      color: var(--mantine-color-white);
+      background-color: var(--mantine-color-blue-5);
+      border-color: var(--mantine-color-blue-6);
+    }
+
+    &.assistant {
+      background-color: var(--mantine-color-white);
+      border-color: var(--mantine-color-gray-4);
+    }
+  }
+
+  .error::after {
+    color: var(--mantine-color-white);
   }
 }

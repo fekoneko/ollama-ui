@@ -12,3 +12,9 @@
     justify-content: space-between;
   }
 }
+
+html[data-mantine-color-scheme="light"] {
+  .root {
+    border-bottom: 1px solid var(--mantine-color-gray-4);
+  }
+}
