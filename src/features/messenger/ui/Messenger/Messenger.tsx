@@ -1,6 +1,6 @@
 import { Chat } from "@/features/chat/ui/Chat";
 import { useChats } from "@/features/messenger/hooks/use-chats";
-import { ChatList } from "@/features/messenger/ui/ChatList";
+import { SidePanel } from "@/features/messenger/ui/SidePanel";
 import { AppShell } from "@mantine/core";
 import { FC, PropsWithChildren } from "react";
 import classes from "./Messenger.module.css";
@@ -11,7 +11,7 @@ export const Messenger: FC<PropsWithChildren> = () => {
   return (
     <AppShell navbar={{ width: "max(18rem, 20%)", breakpoint: "sm" }}>
       <AppShell.Navbar className={classes.navbar} bg="dark.7">
-        <ChatList />
+        <SidePanel />
       </AppShell.Navbar>
 
       <AppShell.Main className={classes.main} bg="dark.8">

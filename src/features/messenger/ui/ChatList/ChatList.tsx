@@ -15,12 +15,6 @@ export const ChatList: FC = () => {
 
   return (
     <div className={classes.chatList}>
-      <div className={classes.titleContainer}>
-        <h1 role="banner" className={classes.title}>
-          Ollama UI
-        </h1>
-      </div>
-
       {chats.map((chat) => (
         <ChatListItem
           key={chat.id}
