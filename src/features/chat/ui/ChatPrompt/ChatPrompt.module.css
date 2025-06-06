@@ -10,6 +10,7 @@
       height: 2.5rem;
       padding: 0 1.2rem;
       border-radius: 10rem;
+      box-shadow: 0 0.5rem 0.5rem var(--mantine-color-dark-8);
     }
 
     .inputRightSection {
@@ -27,11 +28,52 @@
   .submitButtonRoot {
     width: 3.5rem;
     height: 2.5rem;
+    color: var(--mantine-color-dark-1);
+    background-color: var(--mantine-color-dark-6);
+    border: 1px solid var(--mantine-color-dark-5);
     border-radius: 10rem;
+    box-shadow: 0 0.5rem 0.5rem var(--mantine-color-dark-8);
+
+    &:hover {
+      color: var(--mantine-color-dark-0);
+      background-color: var(--mantine-color-dark-5);
+      border: 1px solid var(--mantine-color-dark-4);
+    }
+
+    &:disabled {
+      color: var(--mantine-color-dark-3);
+      background-color: var(--mantine-color-dark-7);
+      border: 1px solid var(--mantine-color-dark-6);
+    }
 
     .submitIcon {
       width: 1.2rem;
       height: 1.2rem;
+    }
+  }
+}
+
+html[data-mantine-color-scheme="light"] {
+  .inputRoot .input {
+    box-shadow: 0 0.5rem 0.5rem var(--mantine-color-gray-3);
+  }
+
+  .submitButtonRoot {
+    color: var(--mantine-color-gray-6);
+    background-color: var(--mantine-color-white);
+    border: 1px solid var(--mantine-color-gray-4);
+    box-shadow: 0 0.5rem 0.5rem var(--mantine-color-gray-3);
+
+    &:hover {
+      color: var(--mantine-color-gray-7);
+      background-color: var(--mantine-color-gray-0);
+      border: 1px solid var(--mantine-color-gray-4);
+    }
+
+    &:disabled {
+      color: var(--mantine-color-gray-5);
+      background-color: var(--mantine-color-gray-1);
+      border: 1px solid var(--mantine-color-gray-4);
     }
   }
 }

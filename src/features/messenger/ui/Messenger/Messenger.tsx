@@ -10,11 +10,11 @@ export const Messenger: FC<PropsWithChildren> = () => {
 
   return (
     <AppShell navbar={{ width: "max(18rem, 20%)", breakpoint: "sm" }}>
-      <AppShell.Navbar className={classes.navbar} bg="dark.7">
+      <AppShell.Navbar className={classes.sidebar}>
         <SidePanel />
       </AppShell.Navbar>
 
-      <AppShell.Main className={classes.main} bg="dark.8">
+      <AppShell.Main className={classes.main}>
         {chats.map((chat) => (
           <Chat key={chat.id} chatId={chat.id} />
         ))}

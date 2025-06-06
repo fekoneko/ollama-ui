@@ -5,6 +5,7 @@
   height: 100%;
 
   .titleContainer {
+    flex-shrink: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,5 +28,15 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
+  }
+}
+
+html[data-mantine-color-scheme="light"] {
+  .titleContainer {
+    border-bottom: 1px solid var(--mantine-color-gray-4);
+
+    .title {
+      color: var(--mantine-color-dark-2);
+    }
   }
 }

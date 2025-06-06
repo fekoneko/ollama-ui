@@ -29,3 +29,10 @@
     }
   }
 }
+
+html[data-mantine-color-scheme="light"] {
+  .chatHeader {
+    background-color: var(--mantine-color-white);
+    border-bottom: 1px solid var(--mantine-color-gray-4);
+  }
+}
