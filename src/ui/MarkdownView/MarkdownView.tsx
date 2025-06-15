@@ -1,4 +1,4 @@
-import { SHIKI_LANGUAGES } from "@/shiki-languages";
+import { SHIKI_LANGUAGES } from "@/lib/shiki";
 import { CodeHighlight, InlineCodeHighlight } from "@mantine/code-highlight";
 import { FC, isValidElement, JSX, PropsWithChildren, ReactNode } from "react";
 import Markdown from "react-markdown";

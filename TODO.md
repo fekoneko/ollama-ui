@@ -1,5 +1,6 @@
 # Cool I guess
 
+- [ ] 'thinking'
 - [ ] possibly list available models to pull
 - [ ] freaking images in freaking messages
 - [ ] create from modelfile
