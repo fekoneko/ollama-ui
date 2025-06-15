@@ -1,5 +1,6 @@
 # Cool I guess
 
+- [ ] configuring generation parameters
 - [ ] 'thinking'
 - [ ] possibly list available models to pull
 - [ ] freaking images in freaking messages
