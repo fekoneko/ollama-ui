@@ -17,7 +17,7 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import ollama from "ollama";
+import ollama from "ollama/browser";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import classes from "./ChatModelPicker.module.css";
